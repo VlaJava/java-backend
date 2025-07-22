@@ -45,7 +45,7 @@ public class ForgotPasswordStrategy implements EmailStrategy {
 
         email.setTo(usuario.getEmail());
         email.setSubject("[Conta Viajava] Recuperação de Senha");
-        email.setFrom("no-reply");
+        email.setFrom(new InternetAddress(this.properties.getMailUsername(), "no-reply"));
 
         final Context context = new Context(LocaleContextHolder.getLocale());
         context.setVariable("nome", usuario.getNome());
@@ -69,11 +69,11 @@ public class ForgotPasswordStrategy implements EmailStrategy {
                 .issuer("viajava-backend")
                 .subject(email)
                 .claim("purpose", "password_reset")
-                .expiresAt(Instant.now().plusSeconds(7200))
+                .expiresAt(Instant.now().plusSeconds(900))
                 .build();
 
         String hashedContent = this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-        return this.properties.getBaseUrl() + "/auth/forgot-password/confirmar-conta?token=" + hashedContent;
+        return this.properties.getBaseUrl() + "/auth/forgot-password?token=" + hashedContent;
     }
 }
