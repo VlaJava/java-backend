@@ -11,14 +11,13 @@ import com.avanade.decolatech.viajava.service.conta.AccountConfirmationService;
 import com.avanade.decolatech.viajava.service.conta.ReenviarLinkConfirmacaoContaService;
 import com.avanade.decolatech.viajava.utils.properties.ApplicationProperties;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.bind.annotation.*;
 
 @RestController
