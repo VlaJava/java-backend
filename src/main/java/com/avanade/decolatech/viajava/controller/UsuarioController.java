@@ -6,16 +6,19 @@ import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedUsuarioRespo
 import com.avanade.decolatech.viajava.domain.dtos.response.UsuarioResponse;
 import com.avanade.decolatech.viajava.domain.mapper.UsuarioMapper;
 import com.avanade.decolatech.viajava.domain.model.Usuario;
-import com.avanade.decolatech.viajava.service.CreateUsuarioService;
-import com.avanade.decolatech.viajava.service.DeleteUsuarioService;
-import com.avanade.decolatech.viajava.service.GetAllUsuariosService;
-import com.avanade.decolatech.viajava.service.GetUsuarioByIdService;
+import com.avanade.decolatech.viajava.domain.model.enums.UsuarioRole;
+import com.avanade.decolatech.viajava.service.usuario.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -26,24 +29,34 @@ public class UsuarioController {
     private final GetUsuarioByIdService getUsuarioByIdService;
     private final GetAllUsuariosService getAllUsuariosService;
     private final DeleteUsuarioService deleteUsuarioService;
+    private final UpdateUsuarioImagemService updateUsuarioImagemService;
+
     private final UsuarioMapper usuarioMapper;
 
     public UsuarioController(
             CreateUsuarioService createUsuarioService,
             GetUsuarioByIdService getUsuarioByIdService,
             GetAllUsuariosService getAllUsuariosService,
-            DeleteUsuarioService deleteUsuarioService,
+            DeleteUsuarioService deleteUsuarioService, UpdateUsuarioImagemService updateUsuarioImagemService,
             UsuarioMapper usuarioMapper) {
         this.createUsuarioService = createUsuarioService;
         this.getUsuarioByIdService = getUsuarioByIdService;
         this.getAllUsuariosService = getAllUsuariosService;
         this.deleteUsuarioService = deleteUsuarioService;
+        this.updateUsuarioImagemService = updateUsuarioImagemService;
         this.usuarioMapper = usuarioMapper;
     }
 
     @PostMapping
-    public ResponseEntity<CreateUsuarioResponse> criarUsuario(CreateUsuarioRequest request) {
-        CreateUsuarioResponse response = this.createUsuarioService.criarUsuario(request);
+    public ResponseEntity<CreateUsuarioResponse> criarUsuario(@RequestBody @Valid CreateUsuarioRequest request) {
+        CreateUsuarioResponse response = this.createUsuarioService.criarUsuario(request, UsuarioRole.CLIENTE);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/admin")
+    public ResponseEntity<CreateUsuarioResponse> criarUsuarioAdmin(@RequestBody @Valid CreateUsuarioRequest request) {
+        CreateUsuarioResponse response = this.createUsuarioService.criarUsuario(request, UsuarioRole.ADMIN);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -72,5 +85,13 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{id}/update-image")
+    public ResponseEntity<Resource> uploadImage(@RequestParam("file") MultipartFile file, @PathVariable("id") UUID id) throws IOException {
+        Resource response = this.updateUsuarioImagemService.updateProfileImage(file, id);
 
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(response);
+    }
 }
