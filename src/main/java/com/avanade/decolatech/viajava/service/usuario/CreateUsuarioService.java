@@ -124,13 +124,14 @@ public class CreateUsuarioService {
 
     @Transactional
     public Documento salvarDocumento(CreateUsuarioRequest request, Usuario usuario) {
-        this.validateTipoDocumento(TipoDocumento.valueOf(request.getTipoDocumento()), request.getNumeroDocumento());
+        TipoDocumento tipoDocumento = TipoDocumento.valueOf(request.getTipoDocumento());
+        this.validateTipoDocumento(tipoDocumento, request.getNumeroDocumento());
 
         Documento documento = Documento
                 .builder()
                 .numeroDocumento(request.getNumeroDocumento())
                 .usuario(usuario)
-                .tipoDocumento(TipoDocumento.valueOf(request.getTipoDocumento()))
+                .tipoDocumento(tipoDocumento)
                 .build();
 
         return this.documentoRepository.save(documento);
