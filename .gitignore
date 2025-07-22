@@ -34,3 +34,7 @@ build/
 
 ### Static Images Folder ###
 uploads
+
+### RSA Keys ###
+*.key
+*.pub
