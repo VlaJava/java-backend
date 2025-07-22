@@ -10,7 +10,7 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:sqlserver://localhost;databaseName=DB_VIAJAVA;encrypt=false
+    url: jdbc:sqlserver://${DATABASE_URL:localhost;databaseName=DB_VIAJAVA;encrypt=false}
     username: ${DB_USER}
     password: ${DB_PASSWORD}
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
@@ -22,3 +22,35 @@ spring:
     properties:
       hibernate:
     database-platform: org.hibernate.dialect.SQLServerDialect
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enabled: true
+            required: true
+
+jwt:
+  public-key: classpath:app.pub
+  private-key: classpath:app.key
+
+app:
+  base-url: ${SERVER_BASE_URL:http://localhost:8080/api/v1}
+  redirect-url: ${REDIRECT_URL:http://localhost:8080/api/v1/usuarios}
+  frontend-url: ${FRONTEND_URL:http://localhost:3000}
+  file:
+    upload:
+      user-dir: ./uploads/user-images
+      pkg-dir: ./uploads/package-images

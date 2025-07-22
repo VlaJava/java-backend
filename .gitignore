@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Static Images Folder ###
+uploads
+
+### RSA Keys ###
+*.key
+*.pub

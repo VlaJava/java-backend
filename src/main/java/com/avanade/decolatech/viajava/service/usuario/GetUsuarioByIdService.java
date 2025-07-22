@@ -1,4 +1,4 @@
-package com.avanade.decolatech.viajava.service;
+package com.avanade.decolatech.viajava.service.usuario;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.domain.model.Usuario;
@@ -10,31 +10,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
 @Service
-public class DeleteUsuarioService {
+public class GetUsuarioByIdService {
 
     private final UsuarioRepository usuarioRepository;
 
-    public DeleteUsuarioService (UsuarioRepository usuarioRepository) {
+    public GetUsuarioByIdService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-    @Transactional
-    public void execute(UUID id) {
-        Usuario usuario = usuarioRepository
+    @Transactional(readOnly = true)
+    public Usuario execute(UUID id) {
+        return usuarioRepository
                 .findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 String.format("[%s execute] - %s",
-                                        DeleteUsuarioService.class.getName(),
+                                        GetUsuarioByIdService.class.getName(),
                                         UsuarioExceptionMessages.USUARIO_NAO_EXISTE)
                         ));
-
-        if(!usuario.isAtivo()) {
-            return;
-        }
-
-        usuario.setAtivo(false);
-
-        usuarioRepository.save(usuario);
     }
 }

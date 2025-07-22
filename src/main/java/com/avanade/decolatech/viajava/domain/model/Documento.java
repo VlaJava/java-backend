@@ -4,6 +4,8 @@ import com.avanade.decolatech.viajava.domain.model.enums.TipoDocumento;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "TB_DOCUMENTOS")
 @Getter
@@ -15,6 +17,10 @@ import lombok.*;
 public class Documento {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "ID")
+    private UUID id;
+
     @Column(name = "NUMERO_DOCUMENTO", nullable = false)
     private String numeroDocumento;
 
