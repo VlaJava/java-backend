@@ -3,7 +3,7 @@ package com.avanade.decolatech.viajava.unit.services.usuarios;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.domain.model.Usuario;
 import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.service.GetUsuarioByIdService;
+import com.avanade.decolatech.viajava.service.usuario.GetUsuarioByIdService;
 import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

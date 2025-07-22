@@ -1,6 +1,5 @@
-package com.avanade.decolatech.viajava.service;
+package com.avanade.decolatech.viajava.service.usuario;
 
-import com.avanade.decolatech.viajava.domain.dtos.response.CreateUsuarioResponse;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.domain.model.Usuario;
 import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;

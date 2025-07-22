@@ -6,7 +6,9 @@ import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedUsuarioRespo
 import com.avanade.decolatech.viajava.domain.dtos.response.UsuarioResponse;
 import com.avanade.decolatech.viajava.domain.model.Usuario;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
+
 
 import java.util.List;
 
@@ -18,6 +20,8 @@ public interface UsuarioMapper {
                 usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getTelefone(), numeroDocumento
         );
     }
+
+    @Mapping(source = "dataNasc", target = "dataNasc")
     Usuario toUsuario(CreateUsuarioRequest createUsuarioRequest);
 
     UsuarioResponse toUsuarioResponse(Usuario usuario);

@@ -9,7 +9,7 @@ import com.avanade.decolatech.viajava.domain.model.Usuario;
 import com.avanade.decolatech.viajava.domain.model.enums.TipoDocumento;
 import com.avanade.decolatech.viajava.domain.repository.DocumentoRepository;
 import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.service.CreateUsuarioService;
+import com.avanade.decolatech.viajava.service.usuario.CreateUsuarioService;
 import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -2,7 +2,7 @@ package com.avanade.decolatech.viajava.unit.services.usuarios;
 
 import com.avanade.decolatech.viajava.domain.model.Usuario;
 import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.service.GetAllUsuariosService;
+import com.avanade.decolatech.viajava.service.usuario.GetAllUsuariosService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
