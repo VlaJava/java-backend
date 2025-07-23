@@ -32,7 +32,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -41,6 +40,13 @@ import java.util.List;
 public class SecurityConfig {
 
     private final ApplicationProperties properties;
+    private static final String[] DOCUMENTATION_OPENAPI = {
+            "/docs/index.html",
+            "/viajava.html", "/viajava/**",
+            "/v3/api-docs/**",
+            "/swagger-ui-custom.html", "/swagger-ui.html", "/swagger-ui/**",
+            "/**.html", "/webjars/**", "/configuration/**", "/swagger-resources/**"
+    };
 
     public SecurityConfig(ApplicationProperties properties) {
         this.properties = properties;
@@ -54,6 +60,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios/admin").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
