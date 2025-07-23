@@ -44,7 +44,7 @@ public class UpdateUsuarioImagemService {
                                 UsuarioExceptionMessages.USUARIO_NAO_EXISTE)));
 
 
-        Path filePath = this.saveLocalImage(file);
+        Path filePath = this.saveLocalImage(file, id);
 
         Resource resource = new UrlResource(filePath.toUri());
 
@@ -55,7 +55,7 @@ public class UpdateUsuarioImagemService {
         return resource;
     }
 
-    private Path saveLocalImage(MultipartFile file) throws IOException {
+    private Path saveLocalImage(MultipartFile file, UUID id) throws IOException {
 
         Path uploadPath = Paths.get(this.properties.getUsuarioImgUploadDir());
         if (!Files.exists(uploadPath)) {
@@ -63,7 +63,7 @@ public class UpdateUsuarioImagemService {
         }
 
         String fileName = file.getOriginalFilename();
-        Path filePath = uploadPath.resolve(fileName);
+        Path filePath = uploadPath.resolve(id.toString());
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
         return filePath;
