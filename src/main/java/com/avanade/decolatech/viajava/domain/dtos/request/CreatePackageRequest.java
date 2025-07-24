@@ -12,39 +12,38 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreatePacoteRequest {
+public class CreatePackageRequest {
 
     @NotBlank
     @Size(max = 100, message = "O título deve ter no máximo 100 caracteres.")
-    private String titulo;
+    private String title;
 
     @NotBlank
     @Size(max = 100, message = "A origem deve ter no máximo 100 caracteres.")
-    private String origem;
+    private String source;
 
     @NotBlank
     @Size(max = 100, message = "O destino deve ter no máximo 100 caracteres.")
-    private String destino;
+    private String destination;
 
     @NotBlank
-    private String descricao;
+    private String description;
 
-    private String imagemUrl;
+    private String imageUrl;
 
     @NotNull
     @Positive(message = "O valor deve ser maior que zero.")
-    private BigDecimal valor;
+    private BigDecimal price;
 
     @NotNull
     @Min(value = 1, message = "O pacote deve permitir pelo menos 1 viajante.")
-    private Integer limiteViajantes;
+    private Integer travelerLimit;
 
     @NotNull
     @FutureOrPresent(message = "A data de início não pode ser no passado.")
-    private LocalDate dataInicio;
+    private LocalDate startDate;
 
     @NotNull
     @Future(message = "A data de fim deve ser uma data futura.")
-    private LocalDate dataFim;
-
+    private LocalDate endDate;
 }

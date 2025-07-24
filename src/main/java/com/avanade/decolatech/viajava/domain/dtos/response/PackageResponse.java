@@ -6,15 +6,15 @@ import java.util.UUID;
 
 public record PackageResponse(
         UUID id,
-        String titulo,
-        String origem,
-        String destino,
-        String descricao,
-        String imagemUrl,
-        BigDecimal valor,
-        Integer limiteViajantes,
-        LocalDate dataInicio,
-        LocalDate dataFim,
-        boolean disponivel
-) {
-}
+        String title,
+        String source,
+        String destination,
+        String description,
+        String imageUrl,
+        BigDecimal price,
+        Integer travelerLimit,
+        LocalDate startDate,
+        LocalDate endDate,
+        boolean available
+) {}
+
