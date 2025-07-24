@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.service.pacote;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreatePacoteRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.CreatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.CreatePackageResponse;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.mapper.PackageMapper;
@@ -20,12 +20,14 @@ public class CreatePackageService {
     }
 
     @Transactional
-    public CreatePackageResponse criarPacote(CreatePacoteRequest request) {
-        Package Package = packageMapper.toPacote(request);
+    public CreatePackageResponse criarPacote(CreatePackageRequest request) {
+        Package pacote = packageMapper.toPacote(request);
 
-        this.validarDatas(Package);
+        this.validarDatas(pacote);
 
-        Package salvo = packageRepository.save(Package);
+        pacote.setAvailable(true);
+
+        Package salvo = packageRepository.save(pacote);
 
         return packageMapper.toCreatePackageResponse(salvo);
     }
