@@ -48,6 +48,6 @@ public class Package {
     @Column(name = "END_DATE", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "AVALIABLE", nullable = false)
+    @Column(name = "AVAILABLE", nullable = false)
     private boolean available;
 }
