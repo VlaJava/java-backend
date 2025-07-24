@@ -1,8 +1,8 @@
 package com.avanade.decolatech.viajava.controller;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreatePacoteRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.CreatePackageRequest;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePacoteRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.CreatePackageResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PackageResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
@@ -47,7 +47,7 @@ public class PackageController {
     }
 
     @PostMapping
-    public ResponseEntity<CreatePackageResponse> createPackage(@RequestBody @Valid CreatePacoteRequest request) {
+    public ResponseEntity<CreatePackageResponse> createPackage(@RequestBody @Valid CreatePackageRequest request) {
 
         CreatePackageResponse response = this.createPackageService.criarPacote(request);
 
@@ -61,20 +61,20 @@ public class PackageController {
     ) {
         Page<Package> response = this.getAllPackagesService.execute(page, size);
 
-        return ResponseEntity.ok(packageMapper.toPaginatedPacoteResponse(response));
+        return ResponseEntity.ok(packageMapper.toPaginatedPackageResponse(response));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PackageResponse> getById(@PathVariable UUID id) {
         Package aPackage = this.getPacoteByIdService.execute(id);
 
-        return ResponseEntity.ok(packageMapper.toPacoteResponse(aPackage));
+        return ResponseEntity.ok(packageMapper.toPackageResponse(aPackage));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PackageResponse> update(
             @PathVariable UUID id,
-            @RequestBody @Valid UpdatePacoteRequest request
+            @RequestBody @Valid UpdatePackageRequest request
     ) {
         PackageResponse response = updatePackageService.execute(id, request);
         return ResponseEntity.ok(response);

@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.domain.mapper;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreatePacoteRequest;
-import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePacoteRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.CreatePackageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.CreatePackageResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PackageResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
@@ -14,47 +14,49 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PackageMapper {
-    default CreatePackageResponse toCreatePackageResponse(Package aPackage) {
+    default CreatePackageResponse toCreatePackageResponse(Package pacote) {
         return new CreatePackageResponse(
-                aPackage.getId(),
-                aPackage.getTitle(),
-                aPackage.getSource(),
-                aPackage.getDestination(),
-                aPackage.getDescription(),
-                aPackage.getImageUrl(),
-                aPackage.getPrice(),
-                aPackage.getTravelerLimit(),
-                aPackage.getStartDate(),
-                aPackage.getEndDate(),
-                aPackage.isAvailable()
+                pacote.getId(),
+                pacote.getTitle(),
+                pacote.getSource(),
+                pacote.getDestination(),
+                pacote.getDescription(),
+                pacote.getImageUrl(),
+                pacote.getPrice(),
+                pacote.getTravelerLimit(),
+                pacote.getStartDate(),
+                pacote.getEndDate(),
+                pacote.isAvailable()
         );
     }
 
     @Mapping(target = "id", ignore = true)
-    Package toPacote(CreatePacoteRequest request);
+    Package toPacote(CreatePackageRequest request);
 
-    default void updatePacoteFromRequest(UpdatePacoteRequest request, Package aPackage) {
-        aPackage.setTitle(request.getTitulo());
-        aPackage.setSource(request.getOrigem());
-        aPackage.setDestination(request.getDestino());
-        aPackage.setDescription(request.getDescricao());
-        aPackage.setImageUrl(request.getImagemUrl());
-        aPackage.setPrice(request.getValor());
-        aPackage.setTravelerLimit(request.getLimiteViajantes());
-        aPackage.setStartDate(request.getDataInicio());
-        aPackage.setEndDate(request.getDataFim());
+    default void updatePacoteFromRequest(UpdatePackageRequest request, Package pacote) {
+        pacote.setTitle(request.getTitle() != null ? request.getTitle() : pacote.getTitle());
+        pacote.setSource(request.getSource() != null ? request.getSource() : pacote.getSource());
+        pacote.setDestination(request.getDestination() != null ? request.getDestination() : pacote.getDestination());
+        pacote.setDescription(request.getDescription() != null ? request.getDescription() : pacote.getDescription());
+        pacote.setImageUrl(request.getImageUrl() != null ? request.getImageUrl() : pacote.getImageUrl());
+        pacote.setPrice(request.getPrice() != null ? request.getPrice() : pacote.getPrice());
+        pacote.setTravelerLimit(request.getTravelerLimit() != null ? request.getTravelerLimit() : pacote.getTravelerLimit());
+        pacote.setStartDate(request.getStartDate() != null ? request.getStartDate() : pacote.getStartDate());
+        pacote.setEndDate(request.getEndDate() != null ? request.getEndDate() : pacote.getEndDate());
+        pacote.setAvailable(request.getAvailable() != null ? request.getAvailable() : pacote.isAvailable());
     }
 
 
-    PackageResponse toPacoteResponse(Package aPackage);
 
-    default PaginatedResponse<PackageResponse> toPaginatedPacoteResponse(Page<Package> pacotes) {
+    PackageResponse toPackageResponse(Package aPackage);
+
+    default PaginatedResponse<PackageResponse> toPaginatedPackageResponse(Page<Package> pacotes) {
         List<PackageResponse> packageResponse =
                 pacotes
                         .getContent()
                         .stream()
                         .filter(Package::isAvailable)
-                        .map(this::toPacoteResponse)
+                        .map(this::toPackageResponse)
                         .toList();
 
         return new PaginatedResponse<>(

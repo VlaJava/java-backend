@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.service.pacote;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePacoteRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.PackageResponse;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.mapper.PackageMapper;
@@ -23,17 +23,17 @@ public class UpdatePackageService {
     }
 
     @Transactional
-    public PackageResponse execute(UUID id, UpdatePacoteRequest request) {
+    public PackageResponse execute(UUID id, UpdatePackageRequest request) {
         Package existente = repository.findById(id)
                 .orElseThrow(() -> new BusinessException("Pacote não encontrado para o ID informado."));
 
-        validarDatas(request.getDataInicio(), request.getDataFim());
+        validarDatas(request.getStartDate(), request.getEndDate());
 
         packageMapper.updatePacoteFromRequest(request, existente);
 
         repository.save(existente);
 
-        return packageMapper.toPacoteResponse(existente);
+        return packageMapper.toPackageResponse(existente);
     }
 
     private void validarDatas(LocalDate dataInicio, LocalDate dataFim) {
