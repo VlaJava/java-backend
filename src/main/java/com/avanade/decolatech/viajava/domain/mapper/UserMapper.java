@@ -14,34 +14,34 @@ import java.util.List;
 
 
 @Mapper(componentModel = "spring")
-public interface UsuarioMapper {
+public interface UserMapper {
     default CreateUserResponse toCreateUsuarioResponse(User user, String numeroDocumento) {
        return new CreateUserResponse(
-                user.getId(), user.getNome(), user.getEmail(), user.getTelefone(), numeroDocumento
+                user.getId(), user.getName(), user.getEmail(), user.getPhone(), numeroDocumento
         );
     }
 
-    @Mapping(source = "dataNasc", target = "dataNasc")
-    User toUsuario(CreateUserRequest createUserRequest);
+    @Mapping(source = "birthdate", target = "birthdate")
+    User toUser(CreateUserRequest createUserRequest);
 
-    UserResponse toUsuarioResponse(User user);
+    UserResponse toUserResponse(User user);
 
-    default PaginatedUserResponse toPaginatedUsuarioResponse(Page<User> usuarios) {
-        List<UserResponse> usuariosResponse =
-                usuarios
+    default PaginatedUserResponse toPaginatedUsersResponse(Page<User> users) {
+        List<UserResponse> usersResponse =
+                users
                         .getContent()
                         .stream()
-                        .filter(User::isAtivo)
-                        .map(this::toUsuarioResponse)
+                        .filter(User::isActive)
+                        .map(this::toUserResponse)
                         .toList();
 
         return
                 PaginatedUserResponse
                         .builder()
-                        .usuarios(usuariosResponse)
-                        .current_page(usuarios.getNumber())
-                        .total_items(usuarios.getTotalElements())
-                        .total_pages(usuarios.getTotalPages())
+                        .users(usersResponse)
+                        .current_page(users.getNumber())
+                        .total_items(users.getTotalElements())
+                        .total_pages(users.getTotalPages())
                         .build();
     }
 
