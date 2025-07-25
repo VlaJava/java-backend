@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.domain.model;
 
-import com.avanade.decolatech.viajava.domain.model.enums.UsuarioRole;
+import com.avanade.decolatech.viajava.domain.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,14 +15,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TB_USUARIOS")
+@Table(name = "TB_USERS")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @Builder
-public class Usuario implements UserDetails {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -46,29 +46,29 @@ public class Usuario implements UserDetails {
     @Column(name = "BIRTHDATE", nullable = false)
     private LocalDate birthdate;
 
-    @Column(name = "IMAGEM_PERFIL")
-    private String imagemPerfil;
+    @Column(name = "IMAGE_URL")
+    private String imageUrl;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Role role;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Documento> documentos;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Document> documents;
 
     @CreationTimestamp
-    @Column(name = "DATA_CADASTRO", nullable = false)
-    private LocalDateTime dataCadastro;
+    @Column(name = "CREATED_AT", nullable = false)
+    private LocalDateTime createdAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.role.getUsuarioRole() == UsuarioRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        if(this.role.getUserRole() == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-        return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+        return List.of(new SimpleGrantedAuthority("ROLE_CLIENT"));
     }
 
     @Override
     public String getPassword() {
-        return this.senha;
+        return this.password;
     }
 
     @Override
@@ -78,6 +78,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.ativo;
+        return this.active;
     }
 }

@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.domain.model;
 
-import com.avanade.decolatech.viajava.domain.model.enums.UsuarioRole;
+import com.avanade.decolatech.viajava.domain.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,9 +21,9 @@ public class Role {
 
     @OneToOne
     @JoinColumn(name = "USUARIO_ID", referencedColumnName = "ID")
-    private Usuario usuario;
+    private User user;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
-    private UsuarioRole usuarioRole;
+    private UserRole userRole;
 }

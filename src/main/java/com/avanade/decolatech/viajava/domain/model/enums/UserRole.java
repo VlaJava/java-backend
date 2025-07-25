@@ -1,10 +1,10 @@
 package com.avanade.decolatech.viajava.domain.model.enums;
 
-public enum UsuarioRole {
+public enum UserRole {
     ADMIN("ADMIN"),
-    CLIENTE("CLIENTE");
+    CLIENT("CLIENT");
 
-    UsuarioRole(String role) {
+    UserRole(String role) {
 
     }
 }

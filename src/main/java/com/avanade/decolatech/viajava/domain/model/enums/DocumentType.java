@@ -1,9 +1,9 @@
 package com.avanade.decolatech.viajava.domain.model.enums;
 
-public enum TipoDocumento {
+public enum DocumentType {
 
-    CPF("CPF"), PASSAPORTE("PASSAPORTE");
+    CPF("CPF"), PASSPORT("PASSPORT");
 
-    TipoDocumento(String cpf) {
+    DocumentType(String value) {
     }
 }
