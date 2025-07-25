@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.unit.services.usuarios;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreateUsuarioRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.CreateUsuarioResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.CreateUserRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.CreateUserResponse;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.mapper.UsuarioMapper;
 import com.avanade.decolatech.viajava.domain.model.Documento;
@@ -41,7 +41,7 @@ class CreateUsuarioServiceTest {
     @InjectMocks
     private CreateUsuarioService createUsuarioService;
 
-    private CreateUsuarioRequest request;
+    private CreateUserRequest request;
 
     private Usuario usuario;
 
@@ -49,7 +49,7 @@ class CreateUsuarioServiceTest {
 
     @BeforeEach
     void setup() {
-        request = CreateUsuarioRequest
+        request = CreateUserRequest
                 .builder()
                 .nome("Josué")
                 .email("josue@email.com")
@@ -88,7 +88,7 @@ class CreateUsuarioServiceTest {
         given(usuarioRepository.save(usuario)).willReturn(usuario);
         given(documentoRepository.save(any(Documento.class))).willReturn(documento);
         given(usuarioMapper.toCreateUsuarioResponse(usuario, documento.getNumeroDocumento()))
-                .willReturn(new CreateUsuarioResponse(
+                .willReturn(new CreateUserResponse(
                         usuario.getId(),
                         usuario.getNome(),
                         usuario.getEmail(),
@@ -96,7 +96,7 @@ class CreateUsuarioServiceTest {
                         documento.getNumeroDocumento()
                 ));
 
-        CreateUsuarioResponse response = createUsuarioService.criarUsuario(request);
+        CreateUserResponse response = createUsuarioService.criarUsuario(request);
 
         assertNotNull(response);
         assertEquals(usuario.getId(), response.id());

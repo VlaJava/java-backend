@@ -1,14 +1,14 @@
 package com.avanade.decolatech.viajava.service.usuario;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreateUsuarioRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.CreateUsuarioResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.CreateUserRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.CreateUserResponse;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.mapper.UsuarioMapper;
-import com.avanade.decolatech.viajava.domain.model.Documento;
+import com.avanade.decolatech.viajava.domain.model.Document;
 import com.avanade.decolatech.viajava.domain.model.Role;
-import com.avanade.decolatech.viajava.domain.model.Usuario;
-import com.avanade.decolatech.viajava.domain.model.enums.TipoDocumento;
-import com.avanade.decolatech.viajava.domain.model.enums.UsuarioRole;
+import com.avanade.decolatech.viajava.domain.model.User;
+import com.avanade.decolatech.viajava.domain.model.enums.DocumentType;
+import com.avanade.decolatech.viajava.domain.model.enums.UserRole;
 import com.avanade.decolatech.viajava.domain.repository.DocumentoRepository;
 import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
 
@@ -51,31 +51,31 @@ public class CreateUsuarioService {
     }
 
     @Transactional
-    public CreateUsuarioResponse criarUsuario(CreateUsuarioRequest request, UsuarioRole usuarioRole) {
+    public CreateUserResponse criarUsuario(CreateUserRequest request, UserRole userRole) {
         this.validateIfDataExists(request);
         this.validateBirthDayDate(request.getDataNasc());
 
-        Usuario usuarioToSave = usuarioMapper.toUsuario(request);
+        User userToSave = usuarioMapper.toUsuario(request);
 
-        usuarioToSave
-                .setSenha(this.passwordEncoder.encode(usuarioToSave.getSenha()));
+        userToSave
+                .setSenha(this.passwordEncoder.encode(userToSave.getSenha()));
 
-        usuarioToSave.setAtivo(false);
+        userToSave.setAtivo(false);
 
         Role role =  Role
                 .builder()
-                .usuarioRole(usuarioRole)
-                .usuario(usuarioToSave)
+                .userRole(userRole)
+                .user(userToSave)
                 .build();
-        usuarioToSave.setRole(role);
+        userToSave.setRole(role);
 
-        Usuario usuario = usuarioRepository.save(usuarioToSave);
+        User user = usuarioRepository.save(userToSave);
 
-       Documento documento = this.salvarDocumento(request, usuario);
+       Document document = this.salvarDocumento(request, user);
 
-       this.emailService.enviarEmail(usuario, EmailType.ACCOUNT_CREATED_EMAIL);
+       this.emailService.enviarEmail(user, EmailType.ACCOUNT_CREATED_EMAIL);
 
-       return usuarioMapper.toCreateUsuarioResponse(usuario, documento.getNumeroDocumento());
+       return usuarioMapper.toCreateUsuarioResponse(user, document.getNumeroDocumento());
     }
 
 
@@ -87,8 +87,8 @@ public class CreateUsuarioService {
         }
     }
 
-    public void validateIfDataExists(CreateUsuarioRequest request) {
-        Optional<Usuario> usuarioEmailExists =
+    public void validateIfDataExists(CreateUserRequest request) {
+        Optional<User> usuarioEmailExists =
                 usuarioRepository.findByEmail(request.getEmail());
         if(usuarioEmailExists.isPresent()) {
             throw new BusinessException(
@@ -98,7 +98,7 @@ public class CreateUsuarioService {
             );
         }
 
-        Optional<Usuario> usuarioTelefoneExists =
+        Optional<User> usuarioTelefoneExists =
                 usuarioRepository.findByTelefone(request.getTelefone());
 
 
@@ -110,7 +110,7 @@ public class CreateUsuarioService {
             );
         }
 
-        Optional<Documento> documentoJaExiste =
+        Optional<Document> documentoJaExiste =
                 documentoRepository.findByNumeroDocumento(request.getNumeroDocumento());
 
         if(documentoJaExiste.isPresent()) {
@@ -123,25 +123,25 @@ public class CreateUsuarioService {
     }
 
     @Transactional
-    public Documento salvarDocumento(CreateUsuarioRequest request, Usuario usuario) {
-        this.validateTipoDocumento(TipoDocumento.valueOf(request.getTipoDocumento()), request.getNumeroDocumento());
+    public Document salvarDocumento(CreateUserRequest request, User user) {
+        this.validateTipoDocumento(DocumentType.valueOf(request.getTipoDocumento()), request.getNumeroDocumento());
 
-        Documento documento = Documento
+        Document document = Document
                 .builder()
                 .numeroDocumento(request.getNumeroDocumento())
-                .usuario(usuario)
-                .tipoDocumento(TipoDocumento.valueOf(request.getTipoDocumento()))
+                .user(user)
+                .tipoDocumento(DocumentType.valueOf(request.getTipoDocumento()))
                 .build();
 
-        return this.documentoRepository.save(documento);
+        return this.documentoRepository.save(document);
     }
 
-    public void validateTipoDocumento(TipoDocumento documento, String numeroDocumento) {
-        if(documento.equals(TipoDocumento.CPF) && !numeroDocumento.matches("^[0-9]{11}$")) {
+    public void validateTipoDocumento(DocumentType documento, String numeroDocumento) {
+        if(documento.equals(DocumentType.CPF) && !numeroDocumento.matches("^[0-9]{11}$")) {
             throw new BusinessException("CPF Inválido.");
         }
 
-        if(documento.equals(TipoDocumento.PASSAPORTE) && !numeroDocumento.matches("^[0-9]{8}$"))  {
+        if(documento.equals(DocumentType.PASSAPORTE) && !numeroDocumento.matches("^[0-9]{8}$"))  {
             throw new BusinessException("Pasaporte inválido.");
         }
     }

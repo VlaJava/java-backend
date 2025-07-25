@@ -1,10 +1,10 @@
 package com.avanade.decolatech.viajava.config.security;
 
 import com.avanade.decolatech.viajava.domain.model.Role;
-import com.avanade.decolatech.viajava.domain.model.Usuario;
-import com.avanade.decolatech.viajava.domain.model.enums.UsuarioRole;
+import com.avanade.decolatech.viajava.domain.model.User;
+import com.avanade.decolatech.viajava.domain.model.enums.UserRole;
 import com.avanade.decolatech.viajava.domain.repository.RoleRepository;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,18 +16,18 @@ import java.time.LocalDate;
 
 
 /**
- * Classe responsável por encriptar a senha do admin a nível de banco de dados.
+ * Classe responsável por encriptar a password do admin a nível de banco de dados.
  */
 @Configuration
 public class AdminUsuarioConfig implements CommandLineRunner {
 
 
     private final Logger logger = LoggerFactory.getLogger(AdminUsuarioConfig.class);
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminUsuarioConfig(UsuarioRepository usuarioRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-        this.usuarioRepository = usuarioRepository;
+    public AdminUsuarioConfig(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -37,32 +37,32 @@ public class AdminUsuarioConfig implements CommandLineRunner {
         String email = "adminmain@email.com";
         this.updateUsersPassword();
 
-        var admin = this.usuarioRepository.findByEmail(email);
+        var admin = this.userRepository.findByEmail(email);
 
         admin.ifPresentOrElse(
                 user -> {
                     this.logger.info("admin ja existe");
                 },
                 () -> {
-                    Usuario usuario = Usuario
+                    User user = User
                             .builder()
-                            .nome("Administrador")
+                            .name("Administrador")
                             .email(email)
-                            .senha(this.passwordEncoder.encode("senha1234"))
-                            .telefone("21992477508")
-                            .ativo(true)
-                            .dataNasc(LocalDate.of(1990, 1, 1))
+                            .password(this.passwordEncoder.encode("senha1234"))
+                            .phone("21992477508")
+                            .active(true)
+                            .birthdate(LocalDate.of(1990, 1, 1))
                             .build();
 
                     Role role = Role
                             .builder()
-                            .usuario(usuario)
-                            .usuarioRole(UsuarioRole.ADMIN)
+                            .user(user)
+                            .userRole(UserRole.ADMIN)
                             .build();
 
-                    usuario.setRole(role);
+                    user.setRole(role);
 
-                    usuarioRepository.save(usuario);
+                    userRepository.save(user);
                 });
 
     }
@@ -70,10 +70,10 @@ public class AdminUsuarioConfig implements CommandLineRunner {
 
     @Transactional
     public void updateUsersPassword() {
-        usuarioRepository.findAll().forEach(user -> {
-            if(!isBCryptHash(user.getSenha())) {
-                user.setSenha(this.passwordEncoder.encode(user.getSenha()));
-                this.usuarioRepository.save(user);
+        userRepository.findAll().forEach(user -> {
+            if(!isBCryptHash(user.getPassword())) {
+                user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+                this.userRepository.save(user);
             }
 
         });

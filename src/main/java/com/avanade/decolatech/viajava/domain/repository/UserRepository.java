@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.domain.repository;
 
-import com.avanade.decolatech.viajava.domain.model.Usuario;
+import com.avanade.decolatech.viajava.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,12 +8,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
+public interface UsuarioRepository extends JpaRepository<User, UUID> {
 
-    Optional<Usuario> findByEmail(String email);
-    Optional<Usuario> findByTelefone(String telefone);
+    Optional<User> findByEmail(String email);
+    Optional<User> findByTelefone(String telefone);
 
-    @Query("SELECT U FROM Usuario U WHERE U.email = :username")
+    @Query("SELECT U FROM User U WHERE U.email = :username")
     UserDetails findByUsername(String username);
 
 }

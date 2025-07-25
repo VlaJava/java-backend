@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.service.usuario;
 
-import com.avanade.decolatech.viajava.domain.model.Usuario;
+import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +17,7 @@ public class GetAllUsuariosService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Usuario> execute(Integer page, Integer size) {
+    public Page<User> execute(Integer page, Integer size) {
         return usuarioRepository
                 .findAll(PageRequest.of(page, size));
     }

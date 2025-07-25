@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.service.usuario;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
-import com.avanade.decolatech.viajava.domain.model.Usuario;
+import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
 import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class GetUsuarioByIdService {
     }
 
     @Transactional(readOnly = true)
-    public Usuario execute(UUID id) {
+    public User execute(UUID id) {
         return usuarioRepository
                 .findById(id)
                 .orElseThrow(() ->

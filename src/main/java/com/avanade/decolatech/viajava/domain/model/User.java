@@ -28,23 +28,23 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "NOME", nullable = false)
-    private String nome;
+    @Column(name = "NAME", nullable = false)
+    private String name;
 
     @Column(name = "EMAIL", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "SENHA", nullable = false)
-    private String senha;
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
 
-    @Column(name = "TELEFONE", nullable = false, unique = true)
-    private String telefone;
+    @Column(name = "PHONE", nullable = false, unique = true)
+    private String phone;
 
-    @Column(name = "ATIVO", nullable = false)
-    private boolean ativo;
+    @Column(name = "ACTIVE", nullable = false)
+    private boolean active;
 
-    @Column(name = "DATA_NASC", nullable = false)
-    private LocalDate dataNasc;
+    @Column(name = "BIRTHDATE", nullable = false)
+    private LocalDate birthdate;
 
     @Column(name = "IMAGEM_PERFIL")
     private String imagemPerfil;

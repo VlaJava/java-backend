@@ -26,7 +26,7 @@ public class Documento {
 
     @ManyToOne
     @JoinColumn(name = "USUARIO_ID", nullable = false)
-    private Usuario usuario;
+    private User user;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "TIPO_DOCUMENTO", nullable = false)

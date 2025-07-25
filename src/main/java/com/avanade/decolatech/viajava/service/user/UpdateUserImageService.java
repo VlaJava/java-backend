@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.service.usuario;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
-import com.avanade.decolatech.viajava.domain.model.Usuario;
+import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
 import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
 import com.avanade.decolatech.viajava.utils.properties.ApplicationProperties;
@@ -36,7 +36,7 @@ public class UpdateUsuarioImagemService {
             throw new IllegalArgumentException("Only JPEG or PNG images are allowed");
         }
 
-        Usuario usuario = this.usuarioRepository
+        User user = this.usuarioRepository
                 .findById(id)
                 .orElseThrow(() ->  new ResourceNotFoundException(
                         String.format("[%s uploadImage] - %s",
@@ -48,9 +48,9 @@ public class UpdateUsuarioImagemService {
 
         Resource resource = new UrlResource(filePath.toUri());
 
-        usuario.setImagemPerfil(filePath.toString());
+        user.setImagemPerfil(filePath.toString());
 
-        this.usuarioRepository.save(usuario);
+        this.usuarioRepository.save(user);
 
         return resource;
     }

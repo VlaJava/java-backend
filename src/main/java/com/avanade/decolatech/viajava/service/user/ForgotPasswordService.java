@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.service.usuario;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.ResetarSenhaRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.ResetPasswordRequest;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.exception.LinkValidationException;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
@@ -40,7 +40,7 @@ public class ForgotPasswordService {
                 });
     }
 
-    public void alterarSenha(ResetarSenhaRequest request, String token) {
+    public void alterarSenha(ResetPasswordRequest request, String token) {
         String novaSenha = request.getNovaSenha();
         String novaSenhaConfirmacao = request.getNovaSenhaConfirmacao();
 
