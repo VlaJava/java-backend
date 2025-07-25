@@ -31,9 +31,9 @@ public interface PackageMapper {
     }
 
     @Mapping(target = "id", ignore = true)
-    Package toPacote(CreatePackageRequest request);
+    Package toPackage(CreatePackageRequest request);
 
-    default void updatePacoteFromRequest(UpdatePackageRequest request, Package pacote) {
+    default void updatePackageFromRequest(UpdatePackageRequest request, Package pacote) {
         pacote.setTitle(request.getTitle() != null ? request.getTitle() : pacote.getTitle());
         pacote.setSource(request.getSource() != null ? request.getSource() : pacote.getSource());
         pacote.setDestination(request.getDestination() != null ? request.getDestination() : pacote.getDestination());

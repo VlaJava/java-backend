@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.service.email;
 
-import com.avanade.decolatech.viajava.domain.model.Usuario;
+import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.strategy.EmailType;
 import com.avanade.decolatech.viajava.strategy.factory.EmailFactory;
 import org.slf4j.Logger;
@@ -20,11 +20,11 @@ public class EmailService {
     }
 
     @Async("virtualThreadExecutor")
-    public void enviarEmail(Usuario usuario, EmailType emailType) {
+    public void sendEmail(User user, EmailType emailType) {
         try {
-            emailFactory.getStrategy(emailType.name()).sendEmail(usuario);
+            emailFactory.getStrategy(emailType.name()).sendEmail(user);
         } catch (Exception e) {
-            logger.error("[{} enviarEmail] - Falha ao enviar email para {}. Erro: {}", getClass().getSimpleName(), usuario.getEmail(), e.getMessage());
+            logger.error("[{} sendEmail] - Email send failed to user {}. Error: {}", getClass().getSimpleName(), user.getEmail(), e.getMessage());
         }
     }
 }

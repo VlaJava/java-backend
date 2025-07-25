@@ -32,10 +32,10 @@ public class ApplicationProperties {
     private String redirectUrl;
 
     @Value("${app.file.upload.user-dir}")
-    private String usuarioImgUploadDir;
+    private String userImageUploadDir;
 
     @Value("${app.file.upload.pkg-dir}")
-    private String pacoteImgUploadDir;
+    private String pkgImgUploadDir;
 
     @Value("${app.frontend-url}")
     private String frontendUrl;

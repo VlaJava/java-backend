@@ -29,7 +29,7 @@ public class UpdatePackageService {
 
         validarDatas(request.getStartDate(), request.getEndDate());
 
-        packageMapper.updatePacoteFromRequest(request, existente);
+        packageMapper.updatePackageFromRequest(request, existente);
 
         repository.save(existente);
 

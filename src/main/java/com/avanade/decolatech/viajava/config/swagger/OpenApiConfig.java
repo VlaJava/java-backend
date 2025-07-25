@@ -19,7 +19,7 @@ public class OpenApiConfig {
                 .info(
                         new Info()
                                 .title("Rest API - ViaJava")
-                                .description("API desenvolvida para gerenciamento de reservas e pacotes de viagens.")
+                                .description("API developed for bookings and travel packages management.")
                                 .version("v1")
                                 .license(new License().name("Apache 2.0").url("https://www.apache.org/licenses/LICENSE-2.0"))
                                 .contact(new Contact().name("Viajava").email("corporate.viajava@gmail.com"))

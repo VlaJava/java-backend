@@ -21,7 +21,7 @@ public class CreatePackageService {
 
     @Transactional
     public CreatePackageResponse criarPacote(CreatePackageRequest request) {
-        Package pacote = packageMapper.toPacote(request);
+        Package pacote = packageMapper.toPackage(request);
 
         this.validarDatas(pacote);
 

@@ -32,7 +32,7 @@ public class CustomAuthEntryPoint implements AuthenticationEntryPoint {
         err.setMethod(req.getMethod());
         err.setCode(HttpStatus.UNAUTHORIZED.value());
         err.setStatus(HttpStatus.UNAUTHORIZED.getReasonPhrase());
-        err.setMessage("Credenciais invalidas");
+        err.setMessage("Invalid Credentials");
         res.setStatus(HttpStatus.UNAUTHORIZED.value());
         res.setContentType(MediaType.APPLICATION_JSON_VALUE);
         res.getWriter().write(mapper.writeValueAsString(err));

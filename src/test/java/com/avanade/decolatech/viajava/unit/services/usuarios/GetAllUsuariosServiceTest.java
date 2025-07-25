@@ -1,8 +1,8 @@
 package com.avanade.decolatech.viajava.unit.services.usuarios;
 
-import com.avanade.decolatech.viajava.domain.model.Usuario;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.service.usuario.GetAllUsuariosService;
+import com.avanade.decolatech.viajava.domain.model.User;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
+import com.avanade.decolatech.viajava.service.user.GetUsersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,18 +26,18 @@ import java.util.UUID;
 public class GetAllUsuariosServiceTest {
 
     @Mock
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
-    private GetAllUsuariosService getAllUsuariosService;
+    private GetUsersService getAllUsuariosService;
 
-    private List<Usuario> usuarios;
+    private List<User> users;
 
     @BeforeEach
     void setup() {
-        usuarios = new ArrayList<>();
+        users = new ArrayList<>();
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("Maria")
                 .email("maria@email.com")
@@ -47,7 +47,7 @@ public class GetAllUsuariosServiceTest {
                 .dataCadastro(LocalDateTime.now())
                 .build());
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("João")
                 .email("joao@email.com")
@@ -57,7 +57,7 @@ public class GetAllUsuariosServiceTest {
                 .dataCadastro(LocalDateTime.now())
                 .build());
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("Ana")
                 .email("ana@email.com")
@@ -67,7 +67,7 @@ public class GetAllUsuariosServiceTest {
                 .dataCadastro(LocalDateTime.now())
                 .build());
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("Carlos")
                 .email("carlos@email.com")
@@ -77,7 +77,7 @@ public class GetAllUsuariosServiceTest {
                 .dataCadastro(LocalDateTime.now())
                 .build());
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("Fernanda")
                 .email("fernanda@email.com")
@@ -87,7 +87,7 @@ public class GetAllUsuariosServiceTest {
                 .dataCadastro(LocalDateTime.now())
                 .build());
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("Lucas")
                 .email("lucas@email.com")
@@ -97,7 +97,7 @@ public class GetAllUsuariosServiceTest {
                 .dataCadastro(LocalDateTime.now())
                 .build());
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("Patricia")
                 .email("patricia@email.com")
@@ -107,7 +107,7 @@ public class GetAllUsuariosServiceTest {
                 .dataCadastro(LocalDateTime.now())
                 .build());
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("Ricardo")
                 .email("ricardo@email.com")
@@ -117,7 +117,7 @@ public class GetAllUsuariosServiceTest {
                 .dataCadastro(LocalDateTime.now())
                 .build());
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("Sofia")
                 .email("sofia@email.com")
@@ -127,7 +127,7 @@ public class GetAllUsuariosServiceTest {
                 .dataCadastro(LocalDateTime.now())
                 .build());
 
-        usuarios.add(Usuario.builder()
+        users.add(User.builder()
                 .id(UUID.randomUUID())
                 .nome("Thiago")
                 .email("thiago@email.com")
@@ -145,17 +145,17 @@ public class GetAllUsuariosServiceTest {
         int expectedSize = 10;
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-        Page<Usuario> usuarioPage = new PageImpl<>(usuarios, pageable, usuarios.size());
+        Page<User> usuarioPage = new PageImpl<>(users, pageable, users.size());
 
-        given(usuarioRepository.findAll(pageable)).willReturn(usuarioPage);
+        given(userRepository.findAll(pageable)).willReturn(usuarioPage);
 
-        Page<Usuario> result = getAllUsuariosService.execute(pageNumber, pageSize);
+        Page<User> result = getAllUsuariosService.execute(pageNumber, pageSize);
 
         assertNotNull(result);
         assertInstanceOf(Page.class, result);
         assertEquals(expectedSize, result.getTotalElements());
-        assertTrue(result.getContent().contains(usuarios.getFirst()));
-        assertTrue(result.getContent().contains(usuarios.getLast()));
+        assertTrue(result.getContent().contains(users.getFirst()));
+        assertTrue(result.getContent().contains(users.getLast()));
     }
 
 }
