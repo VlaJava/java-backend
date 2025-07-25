@@ -19,14 +19,14 @@ import java.time.LocalDate;
  * Classe responsável por encriptar a password do admin a nível de banco de dados.
  */
 @Configuration
-public class AdminUsuarioConfig implements CommandLineRunner {
+public class AdminUserConfig implements CommandLineRunner {
 
 
-    private final Logger logger = LoggerFactory.getLogger(AdminUsuarioConfig.class);
+    private final Logger logger = LoggerFactory.getLogger(AdminUserConfig.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AdminUsuarioConfig(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public AdminUserConfig(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
