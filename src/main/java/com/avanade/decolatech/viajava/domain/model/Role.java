@@ -20,7 +20,7 @@ public class Role {
     private UUID id;
 
     @OneToOne
-    @JoinColumn(name = "USUARIO_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
     private User user;
 
     @Enumerated(EnumType.STRING)
