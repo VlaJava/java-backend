@@ -1,6 +1,5 @@
 package com.avanade.decolatech.viajava.domain.dtos.response;
 
-import com.avanade.decolatech.viajava.domain.model.Usuario;
 import lombok.*;
 import java.util.List;
 
@@ -10,8 +9,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaginatedUsuarioResponse {
-    List<UsuarioResponse> usuarios;
+public class PaginatedUserResponse {
+    List<UserResponse> users;
     int current_page;
     long total_items;
     int total_pages;

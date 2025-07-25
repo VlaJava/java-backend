@@ -2,7 +2,7 @@ package com.avanade.decolatech.viajava.domain.dtos.response;
 
 import java.util.UUID;
 
-public record CreateUsuarioResponse(
-        UUID id, String nome, String email, String telefone, String numeroDocumento
+public record CreateUserResponse(
+        UUID id, String name, String email, String phone, String documentNumber
 ) {
 }
