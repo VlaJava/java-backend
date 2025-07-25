@@ -8,10 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UsuarioRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional<User> findByEmail(String email);
-    Optional<User> findByTelefone(String telefone);
+    Optional<User> findByPhone(String telefone);
 
     @Query("SELECT U FROM User U WHERE U.email = :username")
     UserDetails findByUsername(String username);
