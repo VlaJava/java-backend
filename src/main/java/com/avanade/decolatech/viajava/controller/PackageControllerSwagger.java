@@ -1,0 +1,85 @@
+package com.avanade.decolatech.viajava.controller;
+
+import com.avanade.decolatech.viajava.domain.dtos.request.CreatePackageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePackageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.CreatePackageResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.PackageResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.PositiveOrZero;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.UUID;
+
+public interface PackageControllerSwagger {
+
+    @Operation(summary = "Create a new package")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Package successfully created",
+                content = @Content(schema = @Schema(implementation = CreatePackageResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content)
+    })
+    ResponseEntity<CreatePackageResponse> createPackage(@RequestBody @Valid CreatePackageRequest request);
+
+    @Operation(summary = "List all packages with pagination")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Packages listed successfully",
+                content = @Content(schema = @Schema(implementation = PaginatedResponse.class)))
+    })
+    ResponseEntity<PaginatedResponse<PackageResponse>> getAllPackage(
+            @Parameter(description = "Page", example = "0") @RequestParam(defaultValue = "0") @PositiveOrZero Integer page,
+            @Parameter(description = "Page size", example = "6") @RequestParam(defaultValue = "6") @PositiveOrZero Integer size
+    );
+
+    @Operation(summary = "Filter packages with pagination")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Packages filtered successfully",
+                content = @Content(schema = @Schema(implementation = PaginatedResponse.class)))
+    })
+    ResponseEntity<PaginatedResponse<PackageResponse>> getFilterPackages(
+            @Parameter(description = "Source") @RequestParam(required = false) String source,
+            @Parameter(description = "Destination") @RequestParam(required = false) String destination,
+            @Parameter(description = "Start date", example = "2025-01-01") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) java.time.LocalDate startDate,
+            @Parameter(description = "End date", example = "2025-12-31") @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) java.time.LocalDate endDate,
+            @Parameter(description = "Max price") @RequestParam(required = false) java.math.BigDecimal price,
+            @Parameter(description = "Page", example = "0") @RequestParam(defaultValue = "0") @PositiveOrZero Integer page,
+            @Parameter(description = "Page size", example = "6") @RequestParam(defaultValue = "6") @PositiveOrZero Integer size
+    );
+
+    @Operation(summary = "Get a package by ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Package found",
+                content = @Content(schema = @Schema(implementation = PackageResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Package not found", content = @Content)
+    })
+    ResponseEntity<PackageResponse> getByPackageId(@Parameter(description = "Package ID") @PathVariable UUID id);
+
+    @Operation(summary = "Update an existing package")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Package successfully updated",
+                content = @Content(schema = @Schema(implementation = PackageResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Package not found", content = @Content)
+    })
+    ResponseEntity<PackageResponse> updatePackage(
+            @Parameter(description = "Package ID") @PathVariable UUID id,
+            @RequestBody @Valid UpdatePackageRequest request
+    );
+
+    @Operation(summary = "Delete a package by ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Package successfully deleted", content = @Content),
+        @ApiResponse(responseCode = "404", description = "Package not found", content = @Content)
+    })
+    ResponseEntity<Void> deletePackage(@Parameter(description = "Package ID") @PathVariable UUID id);
+}
