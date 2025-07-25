@@ -23,7 +23,7 @@ import java.util.UUID;
 public class PackageController {
 
     private final CreatePackageService createPackageService;
-    private final GetPackageByIdService getPacoteByIdService;
+    private final GetPackageByIdService getPackageByIdService;
     private final GetAllPackagesService getAllPackagesService;
     private final UpdatePackageService updatePackageService;
     private final DeletePackageService deletePackageService;
@@ -31,15 +31,15 @@ public class PackageController {
 
     public PackageController(
             CreatePackageService createPackageService,
-            GetPackageByIdService getPacoteByIdService,
-            GetAllPackagesService getPacoteAllService,
+            GetPackageByIdService getPackageByIdService,
+            GetAllPackagesService getPackageAllService,
             UpdatePackageService updatePackageService,
             DeletePackageService deletePackageService,
             PackageMapper packageMapper
     ) {
         this.createPackageService = createPackageService;
-        this.getPacoteByIdService = getPacoteByIdService;
-        this.getAllPackagesService = getPacoteAllService;
+        this.getPackageByIdService = getPackageByIdService;
+        this.getAllPackagesService = getPackageAllService;
         this.updatePackageService = updatePackageService;
         this.deletePackageService = deletePackageService;
 
@@ -66,7 +66,7 @@ public class PackageController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PackageResponse> getById(@PathVariable UUID id) {
-        Package aPackage = this.getPacoteByIdService.execute(id);
+        Package aPackage = this.getPackageByIdService.execute(id);
 
         return ResponseEntity.ok(packageMapper.toPackageResponse(aPackage));
     }
