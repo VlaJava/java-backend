@@ -1,13 +1,15 @@
-package com.avanade.decolatech.viajava.service.conta;
+package com.avanade.decolatech.viajava.service.account;
 
 
 import com.avanade.decolatech.viajava.domain.exception.LinkValidationException;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
 import com.avanade.decolatech.viajava.service.email.EmailService;
 import com.avanade.decolatech.viajava.strategy.EmailType;
 import com.avanade.decolatech.viajava.strategy.factory.EmailFactory;
-import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
+import com.avanade.decolatech.viajava.utils.LinkExceptionMessages;
+import com.avanade.decolatech.viajava.utils.TokenExceptionMessages;
+import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -19,38 +21,42 @@ import java.time.Instant;
 @Service
 public class AccountConfirmationService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
     private final JwtDecoder jwtDecoder;
     private final EmailService emailService;
 
-    public AccountConfirmationService(UsuarioRepository usuarioRepository, JwtDecoder jwtDecoder, EmailFactory emailFactory, EmailService emailService) {
-        this.usuarioRepository = usuarioRepository;
+    public AccountConfirmationService(UserRepository userRepository, JwtDecoder jwtDecoder, EmailFactory emailFactory, EmailService emailService) {
+        this.userRepository = userRepository;
         this.jwtDecoder = jwtDecoder;
         this.emailService = emailService;
     }
 
     @Transactional
-    public void confirmarConta(String token) {
+    public void confirmAccount(String token) {
         Jwt extractedToken = this.jwtDecoder.decode(token);
         String email = extractedToken.getSubject();
         Instant expiration = extractedToken.getExpiresAt();
         String purpose = extractedToken.getClaimAsString("purpose");
 
         if (expiration != null && expiration.isBefore(Instant.now())) {
-            throw new LinkValidationException(String.format("[%s confirmarConta] -  O link de confirmação expirou.", AccountConfirmationService.class.getName()));
+            throw new LinkValidationException(String.format("[%s confirmAccount] - %s",
+                    LinkExceptionMessages.CONFIRMATION_LINK_EXPIRED,
+                    AccountConfirmationService.class.getName()));
         }
 
         if (!purpose.equals("account_activation")) {
-            throw new LinkValidationException(String.format("[%s confirmarConta] - O token é inválido para esta operação.", AccountConfirmationService.class.getName()));
+            throw new LinkValidationException(String.format("[%s confirmAccount] - %s.",
+                    TokenExceptionMessages.INVALID_TOKEN_FOR_OPERATION,
+                    AccountConfirmationService.class.getName()));
         }
 
-        this.usuarioRepository.findByEmail(email).ifPresentOrElse(usuario -> {
-            usuario.setAtivo(true);
-            this.usuarioRepository.save(usuario);
+        this.userRepository.findByEmail(email).ifPresentOrElse(user -> {
+            user.setActive(true);
+            this.userRepository.save(user);
 
-            this.emailService.enviarEmail(usuario, EmailType.ACCOUNT_CONFIRMATION_EMAIL);
+            this.emailService.sendEmail(user, EmailType.ACCOUNT_CONFIRMATION_EMAIL);
         }, () -> {
-            throw new ResourceNotFoundException(UsuarioExceptionMessages.USUARIO_NAO_EXISTE);
+            throw new ResourceNotFoundException(UserExceptionMessages.USER_NOT_FOUND);
         });
     }
 }

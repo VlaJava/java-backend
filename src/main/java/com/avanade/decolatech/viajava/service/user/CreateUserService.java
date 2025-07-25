@@ -1,21 +1,21 @@
-package com.avanade.decolatech.viajava.service.usuario;
+package com.avanade.decolatech.viajava.service.user;
 
 import com.avanade.decolatech.viajava.domain.dtos.request.CreateUserRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.CreateUserResponse;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
-import com.avanade.decolatech.viajava.domain.mapper.UsuarioMapper;
+import com.avanade.decolatech.viajava.domain.mapper.UserMapper;
 import com.avanade.decolatech.viajava.domain.model.Document;
 import com.avanade.decolatech.viajava.domain.model.Role;
 import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.domain.model.enums.DocumentType;
 import com.avanade.decolatech.viajava.domain.model.enums.UserRole;
-import com.avanade.decolatech.viajava.domain.repository.DocumentoRepository;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
+import com.avanade.decolatech.viajava.domain.repository.DocumentRepository;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
 
 import com.avanade.decolatech.viajava.service.email.EmailService;
 import com.avanade.decolatech.viajava.strategy.EmailType;
 
-import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
+import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,37 +30,37 @@ import java.util.Optional;
 
 
 @Service
-public class CreateUsuarioService {
+public class CreateUserService {
 
-    private final Logger logger = LoggerFactory.getLogger(CreateUsuarioService.class);
-    private final UsuarioRepository usuarioRepository;
-    private final DocumentoRepository documentoRepository;
+    private final Logger logger = LoggerFactory.getLogger(CreateUserService.class);
+    private final UserRepository userRepository;
+    private final DocumentRepository documentRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UsuarioMapper usuarioMapper;
+    private final UserMapper userMapper;
     private final EmailService emailService;
 
-    public CreateUsuarioService(
-            UsuarioRepository usuarioRepository,
-            DocumentoRepository documentoRepository, PasswordEncoder passwordEncoder,
-            UsuarioMapper usuarioMapper, EmailService emailService) {
-        this.usuarioRepository = usuarioRepository;
-        this.documentoRepository = documentoRepository;
+    public CreateUserService(
+            UserRepository userRepository,
+            DocumentRepository documentRepository, PasswordEncoder passwordEncoder,
+            UserMapper userMapper, EmailService emailService) {
+        this.userRepository = userRepository;
+        this.documentRepository = documentRepository;
         this.passwordEncoder = passwordEncoder;
-        this.usuarioMapper = usuarioMapper;
+        this.userMapper = userMapper;
         this.emailService = emailService;
     }
 
     @Transactional
-    public CreateUserResponse criarUsuario(CreateUserRequest request, UserRole userRole) {
+    public CreateUserResponse createUser(CreateUserRequest request, UserRole userRole) {
         this.validateIfDataExists(request);
-        this.validateBirthDayDate(request.getDataNasc());
+        this.validateBirthDayDate(request.getBirthdate());
 
-        User userToSave = usuarioMapper.toUsuario(request);
+        User userToSave = userMapper.toUser(request);
 
         userToSave
-                .setSenha(this.passwordEncoder.encode(userToSave.getSenha()));
+                .setPassword(this.passwordEncoder.encode(userToSave.getPassword()));
 
-        userToSave.setAtivo(false);
+        userToSave.setActive(false);
 
         Role role =  Role
                 .builder()
@@ -69,80 +69,69 @@ public class CreateUsuarioService {
                 .build();
         userToSave.setRole(role);
 
-        User user = usuarioRepository.save(userToSave);
+        User user = userRepository.save(userToSave);
 
-       Document document = this.salvarDocumento(request, user);
+       Document document = this.saveDocument(request, user);
 
-       this.emailService.enviarEmail(user, EmailType.ACCOUNT_CREATED_EMAIL);
+       this.emailService.sendEmail(user, EmailType.ACCOUNT_CREATED_EMAIL);
 
-       return usuarioMapper.toCreateUsuarioResponse(user, document.getNumeroDocumento());
+       return userMapper.toCreateUsuarioResponse(user, document.getDocumentNumber());
     }
 
 
     public void validateBirthDayDate(LocalDate dataNascimento) {
         if(Period.between(dataNascimento, LocalDate.now()).getYears() < 18 ){
             throw new BusinessException(String.format("[%s validateBirthdayDate] - " +
-                            "Usuário deve ter 18 anos ou mais."
-            , CreateUsuarioService.class.getName()));
+                            "User must have at least 18 years or more."
+            , CreateUserService.class.getName()));
         }
     }
 
     public void validateIfDataExists(CreateUserRequest request) {
-        Optional<User> usuarioEmailExists =
-                usuarioRepository.findByEmail(request.getEmail());
-        if(usuarioEmailExists.isPresent()) {
+        Optional<User> userEmailExists =
+                userRepository.findByEmail(request.getEmail());
+        if(userEmailExists.isPresent()) {
             throw new BusinessException(
                     String.format("[%s validateIfDataExists] - %s",
-                            CreateUsuarioService.class.getName(),
-                            UsuarioExceptionMessages.USUARIO_EMAIL_JA_EXISTE)
+                            CreateUserService.class.getName(),
+                            UserExceptionMessages.USER_EMAIL_ALREADY_EXISTS)
             );
         }
 
-        Optional<User> usuarioTelefoneExists =
-                usuarioRepository.findByTelefone(request.getTelefone());
+        Optional<User> userPhoneExists =
+                userRepository.findByPhone(request.getPhone());
 
 
-        if(usuarioTelefoneExists.isPresent()) {
+        if(userPhoneExists.isPresent()) {
             throw new BusinessException(
                     String.format("[%s validateIfDataExists] - %s",
-                            CreateUsuarioService.class.getName(),
-                            UsuarioExceptionMessages.USUARIO_TELEFONE_JA_EXISTE)
-            );
-        }
-
-        Optional<Document> documentoJaExiste =
-                documentoRepository.findByNumeroDocumento(request.getNumeroDocumento());
-
-        if(documentoJaExiste.isPresent()) {
-            throw new BusinessException(
-                    String.format("[%s validateIfDataExists] - %s",
-                            CreateUsuarioService.class.getName(),
-                            UsuarioExceptionMessages.USUARIO_DOCUMENTO_JA_EXISTE)
+                            CreateUserService.class.getName(),
+                            UserExceptionMessages.USER_PHONE_ALREADY_EXISTS)
             );
         }
     }
 
     @Transactional
-    public Document salvarDocumento(CreateUserRequest request, User user) {
-        this.validateTipoDocumento(DocumentType.valueOf(request.getTipoDocumento()), request.getNumeroDocumento());
+    public Document saveDocument(CreateUserRequest request, User user) {
+        this.validateDocumentType(DocumentType.valueOf(request.getDocumentType()), request.getDocumentNumber());
 
         Document document = Document
                 .builder()
-                .numeroDocumento(request.getNumeroDocumento())
+                .documentNumber(request.getDocumentNumber())
                 .user(user)
-                .tipoDocumento(DocumentType.valueOf(request.getTipoDocumento()))
+                .documentType(DocumentType.valueOf(request.getDocumentType()))
                 .build();
 
-        return this.documentoRepository.save(document);
+        return this.documentRepository.save(document);
     }
 
-    public void validateTipoDocumento(DocumentType documento, String numeroDocumento) {
-        if(documento.equals(DocumentType.CPF) && !numeroDocumento.matches("^[0-9]{11}$")) {
-            throw new BusinessException("CPF Inválido.");
+    public void validateDocumentType(DocumentType document, String documentNumber) {
+        if(document.equals(DocumentType.CPF) && !documentNumber.matches("^[0-9]{11}$")) {
+            throw new BusinessException("Invalid CPF.");
         }
 
-        if(documento.equals(DocumentType.PASSAPORTE) && !numeroDocumento.matches("^[0-9]{8}$"))  {
-            throw new BusinessException("Pasaporte inválido.");
+        if(document.equals(DocumentType.PASSPORT) && !documentNumber.matches("^[0-9]{8}$"))  {
+            throw new BusinessException("Invalid Passport.");
         }
     }
 }

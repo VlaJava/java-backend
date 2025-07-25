@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.strategy.impl;
 
-import com.avanade.decolatech.viajava.domain.model.Usuario;
+import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.strategy.EmailStrategy;
 import com.avanade.decolatech.viajava.strategy.EmailType;
 import com.avanade.decolatech.viajava.utils.properties.ApplicationProperties;
@@ -37,19 +37,19 @@ public class ResendAccountConfirmationEmailStrategy implements EmailStrategy {
     }
 
     @Override
-    public void sendEmail(Usuario usuario) throws MessagingException, UnsupportedEncodingException {
-        String finalLink = this.getFinalLink(usuario.getEmail());
+    public void sendEmail(User user) throws MessagingException, UnsupportedEncodingException {
+        String finalLink = this.getFinalLink(user.getEmail());
 
         final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
         final MimeMessageHelper email;
         email = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-        email.setTo(usuario.getEmail());
+        email.setTo(user.getEmail());
         email.setSubject("[Conta Viajava] Ativação de Conta");
         email.setFrom(new InternetAddress(this.properties.getMailUsername(), "no-reply"));
 
         final Context context = new Context(LocaleContextHolder.getLocale());
-        context.setVariable("nome", usuario.getNome());
+        context.setVariable("nome", user.getName());
         context.setVariable("linkConfirmacao", finalLink);
         context.setVariable("dataAtual", LocalDateTime.now().getYear());
 
@@ -74,6 +74,6 @@ public class ResendAccountConfirmationEmailStrategy implements EmailStrategy {
 
         String hashedContent = this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-        return this.properties.getBaseUrl() + "/auth/signup/confirmar-conta?token=" + hashedContent;
+        return this.properties.getBaseUrl() + "/auth/signup/account-confirmation?token=" + hashedContent;
     }
 }

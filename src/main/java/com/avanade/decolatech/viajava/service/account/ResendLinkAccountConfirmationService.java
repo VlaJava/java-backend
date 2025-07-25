@@ -1,42 +1,42 @@
-package com.avanade.decolatech.viajava.service.conta;
+package com.avanade.decolatech.viajava.service.account;
 
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
-import com.avanade.decolatech.viajava.domain.model.Usuario;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
+import com.avanade.decolatech.viajava.domain.model.User;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
 import com.avanade.decolatech.viajava.service.email.EmailService;
 import com.avanade.decolatech.viajava.strategy.EmailType;
-import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
+import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-public class ReenviarLinkConfirmacaoContaService {
+public class ResendLinkAccountConfirmationService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
     private final EmailService emailService;
 
-    public ReenviarLinkConfirmacaoContaService(UsuarioRepository usuarioRepository, EmailService emailService) {
-        this.usuarioRepository = usuarioRepository;
+    public ResendLinkAccountConfirmationService(UserRepository userRepository, EmailService emailService) {
+        this.userRepository = userRepository;
         this.emailService = emailService;
     }
 
     @Transactional(readOnly = true)
     public void execute(String email) {
-        Usuario usuario = this.usuarioRepository
+        User user = this.userRepository
                 .findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException(UsuarioExceptionMessages.USUARIO_NAO_EXISTE));
+                .orElseThrow(() -> new ResourceNotFoundException(UserExceptionMessages.USER_NOT_FOUND));
 
-        if (usuario.isAtivo()) {
+        if (user.isActive()) {
             throw new BusinessException(
-                    String.format("[%s enviarEmail] - A conta em questão já está ativada.]",
-                            ReenviarLinkConfirmacaoContaService.class.getName()
+                    String.format("[%s execute] - The account provided already have been activated.]",
+                            ResendLinkAccountConfirmationService.class.getName()
                     ));
         }
 
-        this.emailService.enviarEmail(usuario, EmailType.RESEND_ACCOUNT_CONFIRMATION_EMAIL);
+        this.emailService.sendEmail(user, EmailType.RESEND_ACCOUNT_CONFIRMATION_EMAIL);
 
     }
 }

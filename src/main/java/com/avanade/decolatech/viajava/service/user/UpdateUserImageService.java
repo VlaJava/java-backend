@@ -1,9 +1,9 @@
-package com.avanade.decolatech.viajava.service.usuario;
+package com.avanade.decolatech.viajava.service.user;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.domain.model.User;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
+import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 import com.avanade.decolatech.viajava.utils.properties.ApplicationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -19,13 +19,13 @@ import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
-public class UpdateUsuarioImagemService {
+public class UpdateUserImageService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
     private final ApplicationProperties properties;
 
-    public UpdateUsuarioImagemService(UsuarioRepository usuarioRepository, ApplicationProperties properties) {
-        this.usuarioRepository = usuarioRepository;
+    public UpdateUserImageService(UserRepository userRepository, ApplicationProperties properties) {
+        this.userRepository = userRepository;
         this.properties = properties;
     }
 
@@ -36,33 +36,32 @@ public class UpdateUsuarioImagemService {
             throw new IllegalArgumentException("Only JPEG or PNG images are allowed");
         }
 
-        User user = this.usuarioRepository
+        User user = this.userRepository
                 .findById(id)
                 .orElseThrow(() ->  new ResourceNotFoundException(
                         String.format("[%s uploadImage] - %s",
-                                UpdateUsuarioImagemService.class.getName(),
-                                UsuarioExceptionMessages.USUARIO_NAO_EXISTE)));
+                                UpdateUserImageService.class.getName(),
+                                UserExceptionMessages.USER_NOT_FOUND)));
 
 
         Path filePath = this.saveLocalImage(file, id);
 
         Resource resource = new UrlResource(filePath.toUri());
 
-        user.setImagemPerfil(filePath.toString());
+        user.setImageUrl(filePath.toString());
 
-        this.usuarioRepository.save(user);
+        this.userRepository.save(user);
 
         return resource;
     }
 
     private Path saveLocalImage(MultipartFile file, UUID id) throws IOException {
 
-        Path uploadPath = Paths.get(this.properties.getUsuarioImgUploadDir());
+        Path uploadPath = Paths.get(this.properties.getUserImageUploadDir());
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        String fileName = file.getOriginalFilename();
         Path filePath = uploadPath.resolve(id.toString());
         Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 

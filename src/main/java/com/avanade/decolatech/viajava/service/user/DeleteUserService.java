@@ -1,40 +1,40 @@
-package com.avanade.decolatech.viajava.service.usuario;
+package com.avanade.decolatech.viajava.service.user;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.domain.model.User;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
+import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
 @Service
-public class DeleteUsuarioService {
+public class DeleteUserService {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UserRepository userRepository;
 
-    public DeleteUsuarioService (UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
+    public DeleteUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Transactional
     public void execute(UUID id) {
-        User user = usuarioRepository
+        User user = userRepository
                 .findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 String.format("[%s execute] - %s",
-                                        DeleteUsuarioService.class.getName(),
-                                        UsuarioExceptionMessages.USUARIO_NAO_EXISTE)
+                                        DeleteUserService.class.getName(),
+                                        UserExceptionMessages.USER_NOT_FOUND)
                         ));
 
-        if(!user.isAtivo()) {
+        if(!user.isActive()) {
             return;
         }
 
-        user.setAtivo(false);
+        user.setActive(false);
 
-        usuarioRepository.save(user);
+        userRepository.save(user);
     }
 }

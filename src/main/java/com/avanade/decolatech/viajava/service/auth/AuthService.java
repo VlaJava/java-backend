@@ -2,7 +2,7 @@ package com.avanade.decolatech.viajava.service.auth;
 
 import com.avanade.decolatech.viajava.domain.dtos.request.LoginResponse;
 
-import com.avanade.decolatech.viajava.domain.model.Usuario;
+import com.avanade.decolatech.viajava.domain.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.jwt.*;
@@ -23,11 +23,11 @@ public class AuthService {
         this.jwtDecoder = jwtDecoder;
     }
 
-    public LoginResponse generateToken(Usuario user) {
+    public LoginResponse generateToken(User user) {
         var now = Instant.now();
         var expiresIn = 300L;
 
-        String roleName = user.getRole().getUsuarioRole().name();
+        String roleName = user.getRole().getUserRole().name();
 
         var claims = JwtClaimsSet.builder()
                 .issuer("viajava-backend")

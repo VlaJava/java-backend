@@ -1,4 +1,4 @@
-package com.avanade.decolatech.viajava.service.usuario;
+package com.avanade.decolatech.viajava.service.user;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.utils.properties.ApplicationProperties;
@@ -13,20 +13,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
-public class GetUsuarioImagemService {
+public class GetUserImageService {
 
     private final ApplicationProperties properties;
-    private final Logger logger = LoggerFactory.getLogger(GetUsuarioImagemService.class);
+    private final Logger logger = LoggerFactory.getLogger(GetUserImageService.class);
 
-    public GetUsuarioImagemService(ApplicationProperties properties) {
+    public GetUserImageService(ApplicationProperties properties) {
         this.properties = properties;
     }
 
-    public Resource getImagem(String id) {
+    public Resource getImage(String id) {
         Resource resource = null;
 
         try {
-            Path filePath = Paths.get(this.properties.getUsuarioImgUploadDir()).resolve(id);
+            Path filePath = Paths.get(this.properties.getUserImageUploadDir()).resolve(id);
 
             resource = new UrlResource(filePath.toUri());
 
@@ -34,7 +34,7 @@ public class GetUsuarioImagemService {
                 throw new ResourceNotFoundException("No profile picture image found for this user");
             }
         } catch (MalformedURLException ex) {
-            this.logger.error("{} getImagem - MalformedURLException: {} ", GetUsuarioImagemService.class.getName(), ex.getMessage());
+            this.logger.error("{} getImage - MalformedURLException: {} ", GetUserImageService.class.getName(), ex.getMessage());
 
         }
 
