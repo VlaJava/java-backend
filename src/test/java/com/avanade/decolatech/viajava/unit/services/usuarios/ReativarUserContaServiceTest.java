@@ -1,10 +1,10 @@
 package com.avanade.decolatech.viajava.unit.services.usuarios;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
-import com.avanade.decolatech.viajava.domain.model.Usuario;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.service.usuario.ReativarUsuarioContaService;
-import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
+import com.avanade.decolatech.viajava.domain.model.User;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
+import com.avanade.decolatech.viajava.service.user.ReactivateUserAccountService;
+import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,19 +24,19 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class ReativarUsuarioContaServiceTest {
+class ReativarUserContaServiceTest {
 
     @Mock
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
-    private ReativarUsuarioContaService reativarUsuarioContaService;
+    private ReactivateUserAccountService reactivateUserAccountService;
 
-    private Usuario usuario;
+    private User user;
 
     @BeforeEach
     void setUp() {
-      this.usuario =  Usuario.builder()
+      this.user =  User.builder()
                 .id(UUID.randomUUID())
                 .nome("Lucas")
                 .email("lucas@email.com")
@@ -50,35 +50,35 @@ class ReativarUsuarioContaServiceTest {
     @Test
     void reativarUsuario_DeveAtualizarUsuarioComAtivoTrue_QuandoUsuarioExistir() {
         boolean expectedStatus = true;
-        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.of(usuario));
+        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
-        reativarUsuarioContaService.execute(usuario.getId());
+        reactivateUserAccountService.execute(user.getId());
 
-        assertEquals(expectedStatus, usuario.isAtivo());
+        assertEquals(expectedStatus, user.isAtivo());
     }
 
     @Test
     void reativarUsuario_DeveNaoFazerNada_QuandoUsuarioJaEstiverAtivo() {
-        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.of(usuario));
+        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
-        usuario.setAtivo(true);
+        user.setAtivo(true);
 
-        reativarUsuarioContaService.execute(usuario.getId());
+        reactivateUserAccountService.execute(user.getId());
 
-        verify(usuarioRepository, never()).save(usuario);
+        verify(userRepository, never()).save(user);
     }
 
     @Test
     void reativarUsuario_DeveDispararResourceNotFoundException_QuandoUsuarioNaoExistir() {
-        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.empty());
+        given(userRepository.findById(user.getId())).willReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            reativarUsuarioContaService.execute(usuario.getId());
+            reactivateUserAccountService.execute(user.getId());
         });
 
         assertNotNull(exception);
         assertInstanceOf(ResourceNotFoundException.class, exception);
-        assertTrue(exception.getMessage().contains(UsuarioExceptionMessages.USUARIO_NAO_EXISTE));
-        verify(usuarioRepository, never()).save(usuario);
+        assertTrue(exception.getMessage().contains(UserExceptionMessages.USER_NOT_FOUND));
+        verify(userRepository, never()).save(user);
     }
 }

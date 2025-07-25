@@ -1,10 +1,10 @@
 package com.avanade.decolatech.viajava.unit.services.usuarios;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
-import com.avanade.decolatech.viajava.domain.model.Usuario;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.service.usuario.DeleteUsuarioService;
-import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
+import com.avanade.decolatech.viajava.domain.model.User;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
+import com.avanade.decolatech.viajava.service.user.DeleteUserService;
+import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,19 +23,19 @@ import static org.mockito.Mockito.verify;
 
 
 @ExtendWith(MockitoExtension.class)
-public class DeleteUsuarioServiceTest {
+public class DeleteUserServiceTest {
 
     @Mock
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
-    private DeleteUsuarioService deleteUsuarioService;
+    private DeleteUserService deleteUserService;
 
-    private Usuario usuario;
+    private User user;
 
     @BeforeEach
     void setup() {
-        usuario = Usuario
+        user = User
                 .builder()
                 .id(UUID.randomUUID())
                 .nome("Maria")
@@ -50,37 +50,37 @@ public class DeleteUsuarioServiceTest {
     @Test
     void deleteUsuario_DeveAtualizarUsuarioComAtivoFalse_QuandoUsuarioExistir() {
         boolean expectedStatus = false;
-        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.of(usuario));
+        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
-        deleteUsuarioService.execute(usuario.getId());
+        deleteUserService.execute(user.getId());
 
-        assertEquals(expectedStatus, usuario.isAtivo());
+        assertEquals(expectedStatus, user.isAtivo());
 
     }
 
     @Test
     void deleteUsuario_DeveNaoFazerNada_QuandoUsuarioJaEstiverInativo() {
-        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.of(usuario));
+        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
-        usuario.setAtivo(false);
+        user.setAtivo(false);
 
-        deleteUsuarioService.execute(usuario.getId());
+        deleteUserService.execute(user.getId());
 
-        verify(usuarioRepository, never()).save(usuario);
+        verify(userRepository, never()).save(user);
     }
 
     @Test
     void deleteUsuario_DeveDispararResourceNotFoundException_QuandoUsuarioNaoExistir() {
-        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.empty());
+        given(userRepository.findById(user.getId())).willReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            deleteUsuarioService.execute(usuario.getId());
+            deleteUserService.execute(user.getId());
         });
 
         assertNotNull(exception);
         assertInstanceOf(ResourceNotFoundException.class, exception);
-        assertTrue(exception.getMessage().contains(UsuarioExceptionMessages.USUARIO_NAO_EXISTE));
-        verify(usuarioRepository, never()).save(usuario);
+        assertTrue(exception.getMessage().contains(UserExceptionMessages.USER_NOT_FOUND));
+        verify(userRepository, never()).save(user);
     }
 
 }

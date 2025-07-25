@@ -1,10 +1,10 @@
 package com.avanade.decolatech.viajava.unit.services.usuarios;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
-import com.avanade.decolatech.viajava.domain.model.Usuario;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.service.usuario.GetUsuarioByIdService;
-import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
+import com.avanade.decolatech.viajava.domain.model.User;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
+import com.avanade.decolatech.viajava.service.user.GetUserByIdService;
+import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,19 +22,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
-public class GetUsuarioByIdTest {
+public class GetUserByIdTest {
 
     @Mock
-    private UsuarioRepository usuarioRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
-    private GetUsuarioByIdService getUsuarioByIdService;
+    private GetUserByIdService getUserByIdService;
 
-    private Usuario usuario;
+    private User user;
 
     @BeforeEach
     void setup() {
-        usuario = Usuario
+        user = User
                 .builder()
                 .id(UUID.randomUUID())
                 .nome("Isabella")
@@ -48,33 +48,33 @@ public class GetUsuarioByIdTest {
 
     @Test
     void getUsuarioById_DeveRetornarUsuario_QuandoUsuarioExistir() {
-        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.of(usuario));
+        given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
 
-        Usuario resultado = getUsuarioByIdService.execute(usuario.getId());
+        User resultado = getUserByIdService.execute(user.getId());
 
         assertNotNull(resultado);
-        assertInstanceOf(Usuario.class, resultado);
-        assertEquals(usuario.getId(), resultado.getId());
-        assertEquals(usuario.getNome(), resultado.getNome());
-        assertEquals(usuario.getEmail(), resultado.getEmail());
-        assertEquals(usuario.getTelefone(), resultado.getTelefone());
-        assertEquals(usuario.isAtivo(), resultado.isAtivo());
-        assertEquals(usuario.getDataCadastro(), resultado.getDataCadastro());
-        verify(usuarioRepository, times(1)).findById(usuario.getId());
+        assertInstanceOf(User.class, resultado);
+        assertEquals(user.getId(), resultado.getId());
+        assertEquals(user.getNome(), resultado.getNome());
+        assertEquals(user.getEmail(), resultado.getEmail());
+        assertEquals(user.getTelefone(), resultado.getTelefone());
+        assertEquals(user.isAtivo(), resultado.isAtivo());
+        assertEquals(user.getDataCadastro(), resultado.getDataCadastro());
+        verify(userRepository, times(1)).findById(user.getId());
     }
 
     @Test
     void getUsuarioById_DeveLancarResourceNotFoundException_QuandoUsuarioNaoExistir() {
-        given(usuarioRepository.findById(usuario.getId())).willReturn(Optional.empty());
+        given(userRepository.findById(user.getId())).willReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            getUsuarioByIdService.execute(usuario.getId());
+            getUserByIdService.execute(user.getId());
         });
 
         assertNotNull(exception);
         assertInstanceOf(ResourceNotFoundException.class, exception);
-        assertTrue(exception.getMessage().contains(UsuarioExceptionMessages.USUARIO_NAO_EXISTE));
-        verify(usuarioRepository, times(1)).findById(usuario.getId());
+        assertTrue(exception.getMessage().contains(UserExceptionMessages.USER_NOT_FOUND));
+        verify(userRepository, times(1)).findById(user.getId());
     }
 
 }
