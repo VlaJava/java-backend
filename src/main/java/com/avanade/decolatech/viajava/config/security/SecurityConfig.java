@@ -1,8 +1,8 @@
 package com.avanade.decolatech.viajava.config.security;
 
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
-import com.avanade.decolatech.viajava.utils.UsuarioExceptionMessages;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
+import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 import com.avanade.decolatech.viajava.utils.properties.ApplicationProperties;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -61,13 +61,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/usuarios/admin").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/usuarios/**").hasAnyRole("ADMIN", "CLIENTE")
-                        .requestMatchers(HttpMethod.DELETE, "/usuarios").hasAnyRole("ADMIN", "CLIENTE")
-                        .requestMatchers(HttpMethod.GET, "/usuarios/*/image").hasAnyRole("ADMIN", "CLIENTE")
-                        .requestMatchers(HttpMethod.GET, "/usuarios/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/auth/signup/confirmar-conta").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/users/**").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers(HttpMethod.DELETE, "/users").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/users/*/image").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
                         .requestMatchers("/packages/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e
@@ -98,8 +98,8 @@ public class SecurityConfig {
 
 
     @Bean
-    public UserDetailsService userDetailsService(UsuarioRepository usuarioRepository) {
-        return username -> usuarioRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException(UsuarioExceptionMessages.USUARIO_NAO_EXISTE));
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        return username -> userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException(UserExceptionMessages.USER_NOT_FOUND));
     }
 
     @Bean
