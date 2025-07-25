@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UploadImagemRequest {
+public class UploadImageRequest {
     @Schema(type = "string", format = "binary", description = "Arquivo de imagem JPEG ou PNG")
     private MultipartFile file;
 }

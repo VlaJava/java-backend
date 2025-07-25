@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.controller;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreateUsuarioRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.CreateUserRequest;
 import com.avanade.decolatech.viajava.domain.dtos.request.UploadImagemRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.CreateUsuarioResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedUsuarioResponse;
@@ -56,7 +56,7 @@ public class UsuarioController {
 
     @Operation(summary = "Cria um novo usuário com role cliente.", description = "Recurso para criar um novo usuário com role cliente.", responses = {@ApiResponse(responseCode = "201", description = "Usuário Criado com sucesso.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateUsuarioResponse.class))), @ApiResponse(responseCode = "400", description = "Credencial já utilizada por outro usuário.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))), @ApiResponse(responseCode = "422", description = "O dado passado na requisição é inválido.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class)))})
     @PostMapping
-    public ResponseEntity<CreateUsuarioResponse> criarUsuario(@RequestBody @Valid CreateUsuarioRequest request) {
+    public ResponseEntity<CreateUsuarioResponse> criarUsuario(@RequestBody @Valid CreateUserRequest request) {
         CreateUsuarioResponse response = this.createUsuarioService.criarUsuario(request, UsuarioRole.CLIENTE);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -64,7 +64,7 @@ public class UsuarioController {
 
     @Operation(summary = "Cria um novo usuário com role admin.", description = "Recurso para criar um novo usuário com role admin.", security = @SecurityRequirement(name = "security"), responses = {@ApiResponse(responseCode = "201", description = "Admin Criado com sucesso.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CreateUsuarioResponse.class))), @ApiResponse(responseCode = "400", description = "Credencial já utilizada por outro usuário.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))), @ApiResponse(responseCode = "422", description = "O dado passado na requisição é inválido.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class)))})
     @PostMapping("/admin")
-    public ResponseEntity<CreateUsuarioResponse> criarUsuarioAdmin(@RequestBody @Valid CreateUsuarioRequest request) {
+    public ResponseEntity<CreateUsuarioResponse> criarUsuarioAdmin(@RequestBody @Valid CreateUserRequest request) {
         CreateUsuarioResponse response = this.createUsuarioService.criarUsuario(request, UsuarioRole.ADMIN);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

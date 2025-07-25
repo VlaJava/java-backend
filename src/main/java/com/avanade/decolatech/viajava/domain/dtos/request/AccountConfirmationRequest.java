@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConfirmarContaRequest {
+public class AccountConfirmationRequest {
 
     @NotBlank
     private String token;

@@ -11,13 +11,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResetarSenhaRequest {
+public class ResetPasswordRequest {
 
     @NotBlank
-    @Size(min = 8, message = "A senha deve ter pelo menos 8 caracteres")
-    private String novaSenha;
+    @Size(min = 8, message = "The password must have at least 8 characters.")
+    private String password;
 
     @NotBlank
-    @Size(min = 8, message = "A confirmação de senha deve ter pelo menos 8 caracteres")
-    private String novaSenhaConfirmacao;
+    @Size(min = 8, message = "The password confirmation must have at least 8 characters.")
+    private String passwordConfirmation;
 }
