@@ -41,5 +41,5 @@ public class CreateUserRequest {
 
     @NotNull
     @Past
-    private LocalDate birthDate;
+    private LocalDate birthdate;
 }
