@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.config.security;
 
 import com.avanade.decolatech.viajava.domain.exception.ApplicationException;
-import com.avanade.decolatech.viajava.domain.repository.UsuarioRepository;
+import com.avanade.decolatech.viajava.domain.repository.UserRepository;
 import com.avanade.decolatech.viajava.service.auth.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -24,11 +24,11 @@ import java.io.IOException;
 public class SecurityFilter extends OncePerRequestFilter {
 
     private final Logger logger = LoggerFactory.getLogger(SecurityFilter.class);
-    private final UsuarioRepository repository;
+    private final UserRepository repository;
     private final AuthService authService;
 
-    public SecurityFilter(UsuarioRepository usuarioRepository, AuthService authService) {
-        this.repository = usuarioRepository;
+    public SecurityFilter(UserRepository userRepository, AuthService authService) {
+        this.repository = userRepository;
         this.authService = authService;
     }
 
