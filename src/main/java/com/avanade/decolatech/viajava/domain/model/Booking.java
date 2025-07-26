@@ -1,5 +1,6 @@
 package com.avanade.decolatech.viajava.domain.model;
 
+import com.avanade.decolatech.viajava.domain.model.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -39,7 +40,7 @@ public class Booking {
     private LocalDate travelDate;
 
     @Column(name = "BOOKING_STATUS", nullable = false)
-    private String bookingStatus;
+    private BookingStatus bookingStatus;
 
     @PrePersist
     public void prePersist() {
@@ -47,7 +48,7 @@ public class Booking {
             bookingDate = LocalDateTime.now();
         }
         if (bookingStatus == null) {
-            bookingStatus = "PENDING";
+            bookingStatus = BookingStatus.PENDING;
         }
     }
 }
