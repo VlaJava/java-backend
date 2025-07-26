@@ -50,14 +50,13 @@ public interface PackageMapper {
 
     PackageResponse toPackageResponse(Package aPackage);
 
-    default PaginatedResponse<PackageResponse> toPaginatedPackageResponse(Page<Package> pacotes) {
-        List<PackageResponse> packageResponse =
-                pacotes
-                        .getContent()
-                        .stream()
-                        .filter(Package::isAvailable)
-                        .map(this::toPackageResponse)
-                        .toList();
+    default PaginatedResponse<PackageResponse> toPaginatedPackageResponse(Page<Package> pacotes, boolean available) {
+        List<PackageResponse> packageResponse = pacotes
+                .getContent()
+                .stream()
+                .filter(pacote -> !available || pacote.isAvailable())
+                .map(this::toPackageResponse)
+                .toList();
 
         return new PaginatedResponse<>(
                 packageResponse,
