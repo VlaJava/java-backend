@@ -72,6 +72,4 @@ public class BookingController implements BookingControllerSwagger {
         return ResponseEntity.ok(bookingMapper.toPaginatedBookingResponse(bookings));
     }
 
-
-
 }
