@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,7 +24,9 @@ import java.util.UUID;
 
 public interface PackageControllerSwagger {
 
-    @Operation(summary = "Create a new package")
+    @Operation(summary = "Create a new package",
+            description = "Creates a new package.",
+            security = @SecurityRequirement(name = "security"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Package successfully created",
                 content = @Content(schema = @Schema(implementation = CreatePackageResponse.class))),
@@ -31,7 +34,9 @@ public interface PackageControllerSwagger {
     })
     ResponseEntity<CreatePackageResponse> createPackage(@RequestBody @Valid CreatePackageRequest request);
 
-    @Operation(summary = "List all packages with pagination")
+    @Operation(summary = "List all packages with pagination",
+            description = "Returns a paginated list of all packages.",
+            security = @SecurityRequirement(name = "security"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Packages listed successfully",
                 content = @Content(schema = @Schema(implementation = PaginatedResponse.class)))
@@ -41,7 +46,9 @@ public interface PackageControllerSwagger {
             @Parameter(description = "Page size", example = "6") @RequestParam(defaultValue = "6") @PositiveOrZero Integer size
     );
 
-    @Operation(summary = "Filter packages with pagination")
+    @Operation(summary = "Filter packages with pagination",
+            description = "Returns a paginated list of filtered packages.",
+            security = @SecurityRequirement(name = "security"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Packages filtered successfully",
                 content = @Content(schema = @Schema(implementation = PaginatedResponse.class)))
@@ -56,7 +63,9 @@ public interface PackageControllerSwagger {
             @Parameter(description = "Page size", example = "6") @RequestParam(defaultValue = "6") @PositiveOrZero Integer size
     );
 
-    @Operation(summary = "Get a package by ID")
+    @Operation(summary = "Get a package by ID",
+            description = "Returns a package by its ID.",
+            security = @SecurityRequirement(name = "security"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Package found",
                 content = @Content(schema = @Schema(implementation = PackageResponse.class))),
@@ -64,7 +73,9 @@ public interface PackageControllerSwagger {
     })
     ResponseEntity<PackageResponse> getByPackageId(@Parameter(description = "Package ID") @PathVariable UUID id);
 
-    @Operation(summary = "Update an existing package")
+    @Operation(summary = "Update an existing package",
+            description = "Updates an existing package.",
+            security = @SecurityRequirement(name = "security"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Package successfully updated",
                 content = @Content(schema = @Schema(implementation = PackageResponse.class))),
@@ -76,7 +87,9 @@ public interface PackageControllerSwagger {
             @RequestBody @Valid UpdatePackageRequest request
     );
 
-    @Operation(summary = "Delete a package by ID")
+    @Operation(summary = "Delete a package by ID",
+            description = "Deletes a package by its ID.",
+            security = @SecurityRequirement(name = "security"))
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Package successfully deleted", content = @Content),
         @ApiResponse(responseCode = "404", description = "Package not found", content = @Content)
