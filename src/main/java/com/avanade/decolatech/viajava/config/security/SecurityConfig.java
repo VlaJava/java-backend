@@ -69,6 +69,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
                         .requestMatchers("/packages/**").permitAll()
+                        .requestMatchers("/bookings").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers("/bookings/user").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers("/bookings/admin").hasRole("ADMIN")
+
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(entryPoint)
