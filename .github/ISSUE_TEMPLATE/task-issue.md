@@ -19,6 +19,11 @@ assignees: ''
 ## Descrição
 O que precisa ser feito?
 
+## O que deve ser feito?
+- [ ] 1.
+- [ ] 2.
+- [ ] 3.
+
 ## Responsável
 Quem será responsável pela execução?
 
