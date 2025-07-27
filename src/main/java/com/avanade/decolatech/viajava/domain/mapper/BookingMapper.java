@@ -6,11 +6,10 @@ import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
 import com.avanade.decolatech.viajava.domain.model.Booking;
 import com.avanade.decolatech.viajava.domain.model.Package;
 import com.avanade.decolatech.viajava.domain.model.User;
-import com.avanade.decolatech.viajava.domain.model.enums.BookingStatus;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -21,24 +20,13 @@ public interface BookingMapper {
                 .user(user)
                 .travelPackage(travelPackage)
                 .travelDate(request.getTravelDate())
-                .bookingStatus(BookingStatus.PENDING)
-                .bookingDate(LocalDateTime.now())
                 .totalPrice(travelPackage.getPrice())
                 .build();
     }
 
-    default BookingResponse toBookingResponse(Booking booking) {
-        return new BookingResponse(
-                booking.getId(),
-                booking.getUser() != null ? booking.getUser().getId() : null,
-                booking.getTravelPackage() != null ? booking.getTravelPackage().getId() : null,
-                booking.getTotalPrice(),
-                booking.getBookingDate(),
-                booking.getTravelDate(),
-                booking.getBookingStatus().toString()
-        );
-
-    }
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "travelPackage.id", target = "packageId")
+    BookingResponse toBookingResponse(Booking booking);
 
     default PaginatedResponse<BookingResponse> toPaginatedBookingResponse(Page<Booking> bookings) {
 
