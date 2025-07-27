@@ -12,6 +12,7 @@ import java.util.UUID;
 @Table(name = "TB_BOOKINGS")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -39,6 +40,7 @@ public class Booking {
     @Column(name = "TRAVEL_DATE", nullable = false)
     private LocalDate travelDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "BOOKING_STATUS", nullable = false)
     private BookingStatus bookingStatus;
 
