@@ -1,5 +1,6 @@
 package com.avanade.decolatech.viajava.controller;
 
+import com.avanade.decolatech.viajava.controller.docs.PackageControllerSwagger;
 import com.avanade.decolatech.viajava.domain.dtos.request.CreatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.CreatePackageResponse;
