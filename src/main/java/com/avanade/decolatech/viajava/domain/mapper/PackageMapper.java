@@ -48,7 +48,7 @@ public interface PackageMapper {
 
 
 
-    PackageResponse toPackageResponse(Package aPackage);
+    PackageResponse toPackageResponse(Package pacote);
 
     default PaginatedResponse<PackageResponse> toPaginatedPackageResponse(Page<Package> pacotes, boolean available) {
         List<PackageResponse> packageResponse = pacotes
