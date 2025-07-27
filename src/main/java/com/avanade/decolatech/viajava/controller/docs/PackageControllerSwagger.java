@@ -1,4 +1,4 @@
-package com.avanade.decolatech.viajava.controller;
+package com.avanade.decolatech.viajava.controller.docs;
 
 import com.avanade.decolatech.viajava.domain.dtos.request.CreatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePackageRequest;
