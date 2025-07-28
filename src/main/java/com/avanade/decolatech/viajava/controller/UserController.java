@@ -1,10 +1,10 @@
 package com.avanade.decolatech.viajava.controller;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreateUserRequest;
-import com.avanade.decolatech.viajava.domain.dtos.request.UploadImageRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.CreateUserResponse;
-import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedUserResponse;
-import com.avanade.decolatech.viajava.domain.dtos.response.UserResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.CreateUserRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.UploadImageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.user.CreateUserResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.user.PaginatedUserResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.user.UserResponse;
 import com.avanade.decolatech.viajava.domain.exception.ApplicationException;
 import com.avanade.decolatech.viajava.domain.mapper.UserMapper;
 import com.avanade.decolatech.viajava.domain.model.User;
