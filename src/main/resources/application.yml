@@ -54,3 +54,10 @@ app:
     upload:
       user-dir: ./uploads/user-images
       pkg-dir: ./uploads/package-images
+  gateway:
+    mercado-pago:
+      access-token: ${GATEWAY_ACCESS_TOKEN}
+      notification-url: ${GATEWAY_NOTIFICATION_URL:https://3c29569d311b.ngrok-free.app/api/v1/payments/success}
+      success-url: ${FRONTEND_SUCCESS_URL:https://3c29569d311b.ngrok-free.app/api/v1/payments/success}
+      fail-url: ${FRONTEND_FAIL_URL:https://3c29569d311b.ngrok-free.app/api/v1/payments/fail}
+      pending-url: ${FRONTEND_PENDING_URL:https://3c29569d311b.ngrok-free.app/api/v1/payments/pending}
