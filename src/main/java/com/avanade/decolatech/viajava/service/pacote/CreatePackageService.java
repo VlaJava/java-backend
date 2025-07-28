@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.service.pacote;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreatePackageRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.CreatePackageResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.pacote.CreatePackageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.pacote.CreatePackageResponse;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.mapper.PackageMapper;
 import com.avanade.decolatech.viajava.domain.model.Package;

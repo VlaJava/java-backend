@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.service.booking;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.BookingRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.BookingResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.booking.BookingRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.booking.BookingResponse;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.domain.mapper.BookingMapper;

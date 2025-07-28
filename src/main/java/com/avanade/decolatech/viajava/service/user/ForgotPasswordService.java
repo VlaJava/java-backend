@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.service.user;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.ResetPasswordRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.ResetPasswordRequest;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.exception.LinkValidationException;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
