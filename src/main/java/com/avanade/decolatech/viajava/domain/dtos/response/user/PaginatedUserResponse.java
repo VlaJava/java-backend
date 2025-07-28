@@ -1,4 +1,4 @@
-package com.avanade.decolatech.viajava.domain.dtos.response;
+package com.avanade.decolatech.viajava.domain.dtos.response.user;
 
 import lombok.*;
 import java.util.List;

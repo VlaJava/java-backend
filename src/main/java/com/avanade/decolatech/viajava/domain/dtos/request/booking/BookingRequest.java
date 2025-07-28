@@ -1,5 +1,6 @@
-package com.avanade.decolatech.viajava.domain.dtos.request;
+package com.avanade.decolatech.viajava.domain.dtos.request.booking;
 
+import com.avanade.decolatech.viajava.domain.dtos.request.traveler.TravelerRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

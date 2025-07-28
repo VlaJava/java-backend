@@ -1,5 +1,7 @@
-package com.avanade.decolatech.viajava.domain.dtos.response;
+package com.avanade.decolatech.viajava.domain.dtos.response.booking;
 
+
+import com.avanade.decolatech.viajava.domain.dtos.response.traveler.TravelerResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

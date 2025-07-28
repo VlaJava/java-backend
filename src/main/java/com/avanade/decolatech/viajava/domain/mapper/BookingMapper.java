@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.domain.mapper;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.BookingRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.BookingResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.booking.BookingRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.booking.BookingResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
 import com.avanade.decolatech.viajava.domain.model.Booking;
 import com.avanade.decolatech.viajava.domain.model.Package;

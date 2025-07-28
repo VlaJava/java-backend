@@ -1,4 +1,4 @@
-package com.avanade.decolatech.viajava.domain.dtos.response;
+package com.avanade.decolatech.viajava.domain.dtos.response.pacote;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

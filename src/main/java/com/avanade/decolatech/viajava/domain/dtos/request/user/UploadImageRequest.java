@@ -1,4 +1,4 @@
-package com.avanade.decolatech.viajava.domain.dtos.request;
+package com.avanade.decolatech.viajava.domain.dtos.request.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

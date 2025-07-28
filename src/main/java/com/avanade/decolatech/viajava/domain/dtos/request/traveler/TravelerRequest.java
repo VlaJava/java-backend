@@ -1,4 +1,4 @@
-package com.avanade.decolatech.viajava.domain.dtos.request;
+package com.avanade.decolatech.viajava.domain.dtos.request.traveler;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,9 @@
 package com.avanade.decolatech.viajava.domain.mapper;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreatePackageRequest;
-import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePackageRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.CreatePackageResponse;
-import com.avanade.decolatech.viajava.domain.dtos.response.PackageResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.pacote.CreatePackageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.pacote.UpdatePackageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.pacote.CreatePackageResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.pacote.PackageResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
 import com.avanade.decolatech.viajava.domain.model.Package;
 import org.mapstruct.Mapper;
