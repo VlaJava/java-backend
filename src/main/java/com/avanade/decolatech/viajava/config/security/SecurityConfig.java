@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/*/image").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/payments/**").permitAll()
                         .requestMatchers("/packages").permitAll()
                         .requestMatchers("/packages/**").hasRole("ADMIN")
                         .requestMatchers("/bookings").hasAnyRole("ADMIN", "CLIENT")
