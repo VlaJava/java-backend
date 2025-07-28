@@ -1,5 +1,7 @@
 package com.avanade.decolatech.viajava.domain.exception;
 
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -254,11 +256,41 @@ public class Handler {
                 .body(response);
     }
 
+    @ExceptionHandler(MPException.class)
+    public ResponseEntity<ApplicationException> handleMPException(HttpServletRequest request, MPException exception) {
+        LOGGER.error("[MPException ] - {}",exception.getMessage());
+
+        ApplicationException response = new ApplicationException(
+                request,
+                HttpStatus.BAD_REQUEST,
+                "Payment process fail."
+        );
+
+        return ResponseEntity
+                .status(response.getCode())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
+    @ExceptionHandler(MPApiException.class)
+    public ResponseEntity<ApplicationException> handleMPApiException(HttpServletRequest request, MPApiException exception) {
+        LOGGER.error("[MPApiException ] - {}", exception.getApiResponse().getContent());
+
+        ApplicationException response = new ApplicationException(
+                request,
+                HttpStatus.BAD_REQUEST,
+                "Payment process fail."
+        );
+
+        return ResponseEntity
+                .status(response.getCode())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApplicationException> handleGenericException(HttpServletRequest request, Exception exception) {
         LOGGER.error("[class: {} ] - {}", exception.getClass() ,exception.getMessage());
-
-
 
         ApplicationException response = new ApplicationException(
                 request,
