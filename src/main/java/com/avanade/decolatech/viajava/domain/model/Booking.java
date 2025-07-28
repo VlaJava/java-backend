@@ -3,16 +3,17 @@ package com.avanade.decolatech.viajava.domain.model;
 import com.avanade.decolatech.viajava.domain.model.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "TB_BOOKINGS")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -43,6 +44,9 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     @Column(name = "BOOKING_STATUS", nullable = false)
     private BookingStatus bookingStatus;
+
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
+    private List<Traveler> travelers;
 
     @PrePersist
     public void prePersist() {
