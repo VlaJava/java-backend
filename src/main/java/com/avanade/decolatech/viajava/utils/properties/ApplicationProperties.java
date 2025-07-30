@@ -43,9 +43,6 @@ public class ApplicationProperties {
     @Value("${app.gateway.mercado-pago.access-token}")
     private String gatewayAccessToken;
 
-    @Value("${app.gateway.mercado-pago.notification-url}")
-    private String gatewayNotificationUrl;
-
     @Value("${app.gateway.mercado-pago.success-url}")
     private String gatewaySuccessUrl;
 
@@ -54,4 +51,7 @@ public class ApplicationProperties {
 
     @Value("${app.gateway.mercado-pago.pending-url}")
     private String gatewayPendingUrl;
+
+    @Value("${app.frontend-bookings-url}")
+    private String frontendBookingsUrl;
 }
