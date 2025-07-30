@@ -26,12 +26,12 @@ public class GetPackageImageService {
         Resource resource = null;
 
         try {
-            Path filePath = Paths.get(this.properties.getUserImageUploadDir()).resolve(id);
+            Path filePath = Paths.get(this.properties.getPkgImgUploadDir()).resolve(id);
 
             resource = new UrlResource(filePath.toUri());
 
             if(!resource.exists()) {
-                throw new ResourceNotFoundException("No profile picture image found for this user");
+                throw new ResourceNotFoundException("Image not found for this package");
             }
         } catch (MalformedURLException ex) {
             this.logger.error("{} getImage - MalformedURLException: {} ", this.getClass().getName(), ex.getMessage());
