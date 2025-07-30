@@ -1,7 +1,11 @@
 package com.avanade.decolatech.viajava.controller;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.*;
-import com.avanade.decolatech.viajava.domain.dtos.response.CreateUserResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.AccountConfirmationRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.LoginRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.ResendLinkRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.ResetPasswordRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.user.CreateUserResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.user.LoginResponse;
 import com.avanade.decolatech.viajava.domain.exception.ApplicationException;
 import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.service.auth.AuthService;
@@ -56,7 +60,7 @@ public class AuthController {
             })
     @PostMapping
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        var authentication = new UsernamePasswordAuthenticationToken(request.email(), request.senha());
+        var authentication = new UsernamePasswordAuthenticationToken(request.email(), request.password());
 
         Authentication authenticated = this.authenticationManager.authenticate(authentication);
 

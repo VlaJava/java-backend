@@ -38,3 +38,6 @@ uploads
 ### RSA Keys ###
 *.key
 *.pub
+
+### Http temp req ###
+*.http

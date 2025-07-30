@@ -1,6 +1,7 @@
 package com.avanade.decolatech.viajava.domain.model;
 
 import com.avanade.decolatech.viajava.domain.model.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Role {
 
     @OneToOne
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+    @JsonIgnore
     private User user;
 
     @Enumerated(EnumType.STRING)

@@ -6,7 +6,7 @@ import jakarta.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 
 public interface EmailStrategy {
-    void sendEmail(User user) throws MessagingException, UnsupportedEncodingException;
+    void sendEmail(User user, Object... args) throws MessagingException, UnsupportedEncodingException;
 
     EmailType getEmailType();
 }

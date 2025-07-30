@@ -37,7 +37,7 @@ public class ResendAccountConfirmationEmailStrategy implements EmailStrategy {
     }
 
     @Override
-    public void sendEmail(User user) throws MessagingException, UnsupportedEncodingException {
+    public void sendEmail(User user, Object... args) throws MessagingException, UnsupportedEncodingException {
         String finalLink = this.getFinalLink(user.getEmail());
 
         final MimeMessage mimeMessage = this.mailSender.createMimeMessage();

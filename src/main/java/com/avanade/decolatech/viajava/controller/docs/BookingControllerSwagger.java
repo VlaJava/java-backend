@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.controller.docs;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.BookingRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.BookingResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.booking.BookingRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.booking.BookingResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

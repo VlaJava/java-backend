@@ -26,7 +26,7 @@ public class Traveler {
     @Column(name = "NAME", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "DOCUMENT", nullable = false, length = 20)
+    @Column(name = "DOCUMENT_NUMBER", nullable = false, length = 20)
     private String document;
 
     @Column(name = "BIRTHDATE", nullable = false)

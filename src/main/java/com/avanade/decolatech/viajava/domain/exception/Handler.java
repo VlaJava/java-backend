@@ -1,5 +1,7 @@
 package com.avanade.decolatech.viajava.domain.exception;
 
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -254,11 +256,25 @@ public class Handler {
                 .body(response);
     }
 
+    @ExceptionHandler(PaymentGatewayException.class)
+    public ResponseEntity<ApplicationException> handlePaymentGatewayException(HttpServletRequest request, PaymentGatewayException exception) {
+        LOGGER.error("[PaymentGatewayException ] - {}", exception.getMessage());
+
+        ApplicationException response = new ApplicationException(
+                request,
+                HttpStatus.BAD_REQUEST,
+                "Payment process fail."
+        );
+
+        return ResponseEntity
+                .status(response.getCode())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApplicationException> handleGenericException(HttpServletRequest request, Exception exception) {
         LOGGER.error("[class: {} ] - {}", exception.getClass() ,exception.getMessage());
-
-
 
         ApplicationException response = new ApplicationException(
                 request,

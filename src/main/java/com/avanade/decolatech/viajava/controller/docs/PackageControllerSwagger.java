@@ -1,10 +1,12 @@
 package com.avanade.decolatech.viajava.controller.docs;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreatePackageRequest;
-import com.avanade.decolatech.viajava.domain.dtos.request.UpdatePackageRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.CreatePackageResponse;
-import com.avanade.decolatech.viajava.domain.dtos.response.PackageResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.pacote.CreatePackageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.pacote.UpdatePackageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.UploadImageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.pacote.CreatePackageResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.pacote.PackageResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
+import com.avanade.decolatech.viajava.domain.exception.ApplicationException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,12 +16,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
+import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.UUID;
 
 public interface PackageControllerSwagger {
@@ -73,6 +76,15 @@ public interface PackageControllerSwagger {
     })
     ResponseEntity<PackageResponse> getByPackageId(@Parameter(description = "Package ID") @PathVariable UUID id);
 
+    @Operation(summary = "Get Package Image",
+    description = "Returns the package image",
+    security = @SecurityRequirement(name = "security"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Package image found",
+            content = @Content(mediaType = MediaType.IMAGE_JPEG_VALUE, schema = @Schema(type = "string", format = "binary"))),
+    })
+    ResponseEntity<Resource> getPackageImage(@PathVariable("id") UUID id);
+
     @Operation(summary = "Update an existing package",
             description = "Updates an existing package.",
             security = @SecurityRequirement(name = "security"))
@@ -86,6 +98,9 @@ public interface PackageControllerSwagger {
             @Parameter(description = "Package ID") @PathVariable UUID id,
             @RequestBody @Valid UpdatePackageRequest request
     );
+
+    @Operation(summary = "Updates the package's image.", description = "Resource to update the package image.", security = @SecurityRequirement(name = "security"), requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE, schema = @Schema(implementation = UploadImageRequest.class))), responses = {@ApiResponse(responseCode = "200", description = "Image updated successfully.", content = @Content(mediaType = "image/jpeg", schema = @Schema(type = "string", format = "binary"))), @ApiResponse(responseCode = "404", description = "Package not found.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))), @ApiResponse(responseCode = "422", description = "The id gived in the request is invalid.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class)))} )
+    ResponseEntity<Resource> updateImage(@ModelAttribute UploadImageRequest request, @PathVariable("id") UUID id) throws IOException;
 
     @Operation(summary = "Delete a package by ID",
             description = "Deletes a package by its ID.",
