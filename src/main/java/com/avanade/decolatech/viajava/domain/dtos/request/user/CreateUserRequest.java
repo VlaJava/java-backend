@@ -35,7 +35,7 @@ public class CreateUserRequest {
     private String documentNumber;
 
     @NotBlank
-    @Pattern(regexp = "CPF|PASSAPORTE", message = "The document type must be CPF or PASSAPORTE")
+    @Pattern(regexp = "CPF|PASSPORT", message = "The document type must be CPF or PASSPORT")
     private String documentType;
 
 
