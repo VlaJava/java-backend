@@ -1,8 +1,8 @@
 package com.avanade.decolatech.viajava.domain.model.enums;
 
-public enum PaymentMethod {
-    CREDIT_CARD,
-    DEBIT_CARD,
+public enum DomainPaymentMethod {
+    CREDIT,
+    DEBIT,
     PIX,
     BOLETO,
     ACCOUNT_MONEY,
