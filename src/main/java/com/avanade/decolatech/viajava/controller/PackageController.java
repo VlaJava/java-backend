@@ -43,6 +43,7 @@ public class PackageController implements PackageControllerSwagger {
     private final UpdatePackageService updatePackageService;
     private final DeletePackageService deletePackageService;
     private final GetFilterPackagesService getFilterPackagesService;
+    private final GetPackageImageService getPackageImageService;
     private final UpdatePackageImageService updatePackageImageService;
     private final PackageMapper packageMapper;
 
@@ -52,7 +53,7 @@ public class PackageController implements PackageControllerSwagger {
             GetAllPackagesService getPackageAllService,
             UpdatePackageService updatePackageService,
             DeletePackageService deletePackageService,
-            GetFilterPackagesService getFilterPackagesService, UpdatePackageImageService updatePackageImageService,
+            GetFilterPackagesService getFilterPackagesService, GetPackageImageService getPackageImageService, UpdatePackageImageService updatePackageImageService,
             PackageMapper packageMapper
     ) {
         this.createPackageService = createPackageService;
@@ -61,6 +62,7 @@ public class PackageController implements PackageControllerSwagger {
         this.updatePackageService = updatePackageService;
         this.deletePackageService = deletePackageService;
         this.getFilterPackagesService = getFilterPackagesService;
+        this.getPackageImageService = getPackageImageService;
         this.updatePackageImageService = updatePackageImageService;
 
         this.packageMapper = packageMapper;
@@ -98,6 +100,16 @@ public class PackageController implements PackageControllerSwagger {
         Page<Package> response = this.getAllPackagesService.execute(page, size);
 
         return ResponseEntity.ok(packageMapper.toPaginatedPackageResponse(response, false));
+    }
+
+    @GetMapping("/{id}/image")
+    public ResponseEntity<Resource> getPackageImage(@PathVariable("id") UUID id)  {
+        Resource resource = this.getPackageImageService.getImage(id.toString());
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(resource);
     }
 
     @GetMapping("/{id}")

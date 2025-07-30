@@ -76,6 +76,15 @@ public interface PackageControllerSwagger {
     })
     ResponseEntity<PackageResponse> getByPackageId(@Parameter(description = "Package ID") @PathVariable UUID id);
 
+    @Operation(summary = "Get Package Image",
+    description = "Returns the package image",
+    security = @SecurityRequirement(name = "security"))
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Package image found",
+            content = @Content(mediaType = MediaType.IMAGE_JPEG_VALUE, schema = @Schema(type = "string", format = "binary"))),
+    })
+    ResponseEntity<Resource> getPackageImage(@PathVariable("id") UUID id);
+
     @Operation(summary = "Update an existing package",
             description = "Updates an existing package.",
             security = @SecurityRequirement(name = "security"))
