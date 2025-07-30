@@ -1,12 +1,15 @@
 package com.avanade.decolatech.viajava.controller.docs;
 
 import com.avanade.decolatech.viajava.domain.dtos.request.user.CreateUserRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.ResendLinkRequest;
 import com.avanade.decolatech.viajava.domain.dtos.request.user.UpdateRoleRequest;
 import com.avanade.decolatech.viajava.domain.dtos.request.user.UploadImageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.payment.PaymentUserResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.user.CreateUserResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.user.UserResponse;
 import com.avanade.decolatech.viajava.domain.exception.ApplicationException;
+import com.avanade.decolatech.viajava.domain.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,12 +21,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -69,12 +71,40 @@ public interface UserControllerSwagger {
     })
     ResponseEntity<Resource> getUserImage(@PathVariable("id") UUID id);
 
+    @Operation(summary = "Filter user payments with pagination",
+            description = "Returns a paginated list of filtered user payments.",
+            security = @SecurityRequirement(name = "security"))
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Users filtered successfully",
+                    content = @Content(
+                            schema = @Schema(implementation = PaginatedResponse.class))),
+            @ApiResponse(responseCode = "403",
+            description = "User not authenticated.",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class)))
+    })
+    ResponseEntity<PaginatedResponse<PaymentUserResponse>> getUserPayments(
+            @RequestParam(defaultValue = "0") @PositiveOrZero Integer page,
+            @RequestParam(defaultValue = "10") @PositiveOrZero Integer size,
+            @AuthenticationPrincipal User user);
+
     @Operation(summary = "Deletes a user.", description = "Resource to delete an existing user by ID.", security = @SecurityRequirement(name = "security"), responses = {
             @ApiResponse(responseCode = "204", description = "User deleted successfully."),
             @ApiResponse(responseCode = "404", description = "User not found.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))),
             @ApiResponse(responseCode = "422", description = "The id passed in the request is invalid.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class)))
     })
     ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id);
+
+    @Operation(summary = "Reactivates the user account",
+    description = "Resource to reactivate the user account",
+    security = @SecurityRequirement(name = "security"),
+    responses = {
+            @ApiResponse(responseCode = "204", description = "User reactivated successfully."),
+            @ApiResponse(responseCode = "404", description = "User not found.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))),
+            @ApiResponse(responseCode = "422", description = "The email provided in the request is invalid.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class)))
+    })
+    ResponseEntity<Void> reactivateUserAccount(@RequestBody @Valid ResendLinkRequest request);
 
     @Operation(summary = "Updates the user's profile image.", description = "Resource to update the user's profile image.", security = @SecurityRequirement(name = "security"), requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE, schema = @Schema(implementation = UploadImageRequest.class))), responses = {
             @ApiResponse(responseCode = "200", description = "Image updated successfully.", content = @Content(mediaType = "image/jpeg", schema = @Schema(type = "string", format = "binary"))),
