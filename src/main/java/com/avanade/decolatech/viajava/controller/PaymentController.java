@@ -62,6 +62,7 @@ public class PaymentController {
     }
 
     @PostMapping("/webhook")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Void> handleGatewayNotification(@RequestBody(required = false) MercadoPagoNotification notification) {
         if (notification == null || notification.getData() == null || notification.getData().getId() == null) {
             this.LOGGER.info("Received invalid gateway notification. Notification: {}", notification);

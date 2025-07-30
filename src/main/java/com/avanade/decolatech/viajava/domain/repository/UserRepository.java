@@ -27,8 +27,8 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
             "P.paymentDate, " +
             "P.paymentStatus) " +
             "FROM User U " +
-            "LEFT JOIN Booking B ON U.id = B.user " +
-            "RIGHT JOIN PaymentEntity P ON B.id = P.booking " +
+            "LEFT JOIN Booking B ON U.id = B.user.id " +
+            "RIGHT JOIN PaymentEntity P ON B.id = P.booking.id " +
             "WHERE U.id = :userId")
     Page<PaymentUserResponse> findAllPaymentsByUserId(UUID userId, Pageable pageable);
 }
