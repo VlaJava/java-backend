@@ -1,11 +1,12 @@
 package com.avanade.decolatech.viajava.controller;
 
 import com.avanade.decolatech.viajava.domain.dtos.request.payment.CreatePaymentRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.payment.MercadoPagoNotification;
+import com.avanade.decolatech.viajava.domain.dtos.request.payment.ProcessPaymentNotificationRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.payment.CreatePreferenceResponse;
 import com.avanade.decolatech.viajava.domain.model.User;
-import com.avanade.decolatech.viajava.service.payment.CreatePaymentService;
-import com.mercadopago.exceptions.MPApiException;
-import com.mercadopago.exceptions.MPException;
+import com.avanade.decolatech.viajava.service.payment.CreatePreferenceService;
+import com.avanade.decolatech.viajava.service.payment.ProcessPaymentNotificationService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,28 +20,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/payments")
 public class PaymentController {
 
-    private final CreatePaymentService createPaymentService;
+    private final CreatePreferenceService createPreferenceService;
+    private final ProcessPaymentNotificationService notificationService;
     private final Logger LOGGER = LoggerFactory.getLogger(PaymentController.class);
 
-    public PaymentController(CreatePaymentService createPaymentService) {
-        this.createPaymentService = createPaymentService;
+    public PaymentController(CreatePreferenceService createPreferenceService, ProcessPaymentNotificationService notificationService) {
+        this.createPreferenceService = createPreferenceService;
+        this.notificationService = notificationService;
     }
 
     @PostMapping("/preference")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<CreatePreferenceResponse> createPreference(
+    public ResponseEntity<Void> createPreference(
             @RequestBody @Valid CreatePaymentRequest createPaymentRequest,
             @AuthenticationPrincipal User user
-            ) throws MPException, MPApiException {
+    )  {
 
-        CreatePreferenceResponse response = this.createPaymentService.createPayment(createPaymentRequest.bookingId(), user.getId());
-
-        this.LOGGER.info("Mercado Pago redirect url {}", response.redirectUrl());
+        this.createPreferenceService.createPayment(createPaymentRequest.bookingId(), user.getId());
 
         return ResponseEntity
-                .status(HttpStatus.FOUND)
-                .header("Location", response.redirectUrl())
-                .body(response);
+                .status(HttpStatus.CREATED)
+                .build();
     }
 
     @GetMapping("/success")
@@ -59,5 +59,35 @@ public class PaymentController {
     @PreAuthorize("permitAll()")
     public String pending() {
         return "pending";
+    }
+
+    @PostMapping("/webhook")
+    public ResponseEntity<Void> handleGatewayNotification(@RequestBody(required = false) MercadoPagoNotification notification) {
+        if (notification == null || notification.getData() == null || notification.getData().getId() == null) {
+            this.LOGGER.info("Received invalid gateway notification. Notification: {}", notification);
+            return ResponseEntity.ok().build();
+        }
+
+        String resourceId = notification.getData().getId();
+        String resourceType = notification.getType();
+
+        if (!"payment".equalsIgnoreCase(resourceType)) {
+            this.LOGGER.info("Non Payment Notification received: {}", resourceType);
+            return ResponseEntity.ok().build();
+        }
+
+        var request = new ProcessPaymentNotificationRequest(resourceType, resourceId);
+
+        try {
+
+            this.notificationService.processNotification(request);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+
+            return ResponseEntity.ok().build();
+        }
+
+
     }
 }
