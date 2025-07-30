@@ -70,6 +70,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/*").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/users/reactivate").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/payments/webhook").permitAll()
                         .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers("/packages/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/packages", "/packages/*").permitAll()
