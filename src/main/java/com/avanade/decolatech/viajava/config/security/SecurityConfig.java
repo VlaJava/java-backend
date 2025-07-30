@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/users").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.GET, "/users/*/image").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/users/reactivate").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
                         .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers("/packages").permitAll()
