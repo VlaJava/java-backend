@@ -3,21 +3,31 @@ package com.avanade.decolatech.viajava.controller;
 import com.avanade.decolatech.viajava.controller.docs.PackageControllerSwagger;
 import com.avanade.decolatech.viajava.domain.dtos.request.pacote.CreatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.request.pacote.UpdatePackageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.UploadImageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.pacote.CreatePackageResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.pacote.PackageResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
+import com.avanade.decolatech.viajava.domain.exception.ApplicationException;
 import com.avanade.decolatech.viajava.domain.mapper.PackageMapper;
 import com.avanade.decolatech.viajava.domain.model.Package;
 import com.avanade.decolatech.viajava.service.pacote.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -33,6 +43,7 @@ public class PackageController implements PackageControllerSwagger {
     private final UpdatePackageService updatePackageService;
     private final DeletePackageService deletePackageService;
     private final GetFilterPackagesService getFilterPackagesService;
+    private final UpdatePackageImageService updatePackageImageService;
     private final PackageMapper packageMapper;
 
     public PackageController(
@@ -41,7 +52,7 @@ public class PackageController implements PackageControllerSwagger {
             GetAllPackagesService getPackageAllService,
             UpdatePackageService updatePackageService,
             DeletePackageService deletePackageService,
-            GetFilterPackagesService getFilterPackagesService,
+            GetFilterPackagesService getFilterPackagesService, UpdatePackageImageService updatePackageImageService,
             PackageMapper packageMapper
     ) {
         this.createPackageService = createPackageService;
@@ -50,6 +61,7 @@ public class PackageController implements PackageControllerSwagger {
         this.updatePackageService = updatePackageService;
         this.deletePackageService = deletePackageService;
         this.getFilterPackagesService = getFilterPackagesService;
+        this.updatePackageImageService = updatePackageImageService;
 
         this.packageMapper = packageMapper;
     }
@@ -104,6 +116,11 @@ public class PackageController implements PackageControllerSwagger {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping(path = "/{id}/update-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Resource> updateImage(@ModelAttribute UploadImageRequest request, @PathVariable("id") UUID id) throws IOException {
+        Resource response = this.updatePackageImageService.updatePackageImage(request.getFile(), id);
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(response);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePackage(@PathVariable UUID id) {
