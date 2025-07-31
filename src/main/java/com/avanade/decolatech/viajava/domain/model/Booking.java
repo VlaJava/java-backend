@@ -35,6 +35,9 @@ public class Booking {
     @Column(name = "TOTAL_PRICE", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalPrice;
 
+    @Column(name = "ORDER_NUMBER", unique = true)
+    private String orderNumber;
+
     @Column(name = "BOOKING_DATE", nullable = false)
     private LocalDateTime bookingDate;
 

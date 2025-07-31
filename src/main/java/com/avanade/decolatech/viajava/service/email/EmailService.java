@@ -20,9 +20,9 @@ public class EmailService {
     }
 
     @Async("virtualThreadExecutor")
-    public void sendEmail(User user, EmailType emailType) {
+    public void sendEmail(User user, EmailType emailType, Object... args) {
         try {
-            emailFactory.getStrategy(emailType.name()).sendEmail(user);
+            emailFactory.getStrategy(emailType.name()).sendEmail(user, args);
         } catch (Exception e) {
             logger.error("[{} sendEmail] - Email send failed to user {}. Error: {}", getClass().getSimpleName(), user.getEmail(), e.getMessage());
         }

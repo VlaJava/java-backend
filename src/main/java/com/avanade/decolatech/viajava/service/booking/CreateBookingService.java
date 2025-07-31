@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.service.booking;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.BookingRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.BookingResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.booking.BookingRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.booking.BookingResponse;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.domain.mapper.BookingMapper;
@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -94,13 +95,24 @@ public class CreateBookingService {
     private Booking buildBooking(BookingRequest request, User user, Package travelPackage) {
         Booking booking = bookingMapper.toBooking(request, user, travelPackage);
 
+        AtomicInteger numberOfTravelersOverEighteen = new AtomicInteger();
+        int currentYear = LocalDate.now().getYear();
+
         List<Traveler> travelers = request.getTravelers().stream()
                 .map(travelerRequest -> {
+                    if (currentYear - travelerRequest.birthdate().getYear() >= 18) {
+                        numberOfTravelersOverEighteen.getAndIncrement();
+                    }
                     Traveler traveler = travelerMapper.toTraveler(travelerRequest);
                     traveler.setBooking(booking);
                     return traveler;
                 })
                 .collect(Collectors.toList());
+
+        if (numberOfTravelersOverEighteen.get() == 0) {
+            throw new BusinessException(
+                    "Is not possible to create an booking without at least one of the travelers over 18 years.");
+        }
 
         booking.setTravelers(travelers);
 

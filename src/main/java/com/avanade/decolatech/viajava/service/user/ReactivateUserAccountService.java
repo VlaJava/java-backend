@@ -19,9 +19,9 @@ public class ReactivateUserAccountService {
     }
 
     @Transactional
-    public void execute(UUID id) {
+    public void execute(String email) {
         User user = userRepository
-                .findById(id)
+                .findByEmail(email)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 String.format("[%s execute] - %s",

@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.service.auth;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.LoginResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.user.LoginResponse;
 
 import com.avanade.decolatech.viajava.domain.model.User;
 import org.slf4j.Logger;

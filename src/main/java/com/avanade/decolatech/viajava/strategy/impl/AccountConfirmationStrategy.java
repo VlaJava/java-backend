@@ -32,7 +32,7 @@ public class AccountConfirmationStrategy implements EmailStrategy {
     }
 
     @Override
-    public void sendEmail(User user) throws MessagingException, UnsupportedEncodingException {
+    public void sendEmail(User user, Object... args) throws MessagingException, UnsupportedEncodingException {
         final MimeMessage mimeMessage = this.mailSender.createMimeMessage();
         final MimeMessageHelper email;
         email = new MimeMessageHelper(mimeMessage, true, "UTF-8");

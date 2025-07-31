@@ -1,9 +1,10 @@
 package com.avanade.decolatech.viajava.domain.mapper;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreateUserRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.CreateUserResponse;
-import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedUserResponse;
-import com.avanade.decolatech.viajava.domain.dtos.response.UserResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.CreateUserRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.payment.PaymentUserResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.user.CreateUserResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.user.UserResponse;
 import com.avanade.decolatech.viajava.domain.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,7 +27,7 @@ public interface UserMapper {
 
     UserResponse toUserResponse(User user);
 
-    default PaginatedUserResponse toPaginatedUsersResponse(Page<User> users) {
+    default PaginatedResponse<UserResponse> toPaginatedUsersResponse(Page<User> users) {
         List<UserResponse> usersResponse =
                 users
                         .getContent()
@@ -35,14 +36,16 @@ public interface UserMapper {
                         .map(this::toUserResponse)
                         .toList();
 
-        return
-                PaginatedUserResponse
-                        .builder()
-                        .users(usersResponse)
-                        .current_page(users.getNumber())
-                        .total_items(users.getTotalElements())
-                        .total_pages(users.getTotalPages())
-                        .build();
+        return new PaginatedResponse<>
+                (usersResponse, users.getNumber(), users.getTotalElements(), users.getTotalPages());
     }
 
+    default PaginatedResponse<PaymentUserResponse> toPaginatedUserPaymentsResponse(Page<PaymentUserResponse> payments) {
+        return new PaginatedResponse<>(
+                payments.getContent(),
+                payments.getNumber(),
+                payments.getTotalElements(),
+                payments.getTotalPages()
+        );
+    }
 }
