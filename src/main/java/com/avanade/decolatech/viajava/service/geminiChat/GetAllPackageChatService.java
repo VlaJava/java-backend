@@ -1,6 +1,6 @@
 package com.avanade.decolatech.viajava.service.geminiChat;
 
-import com.avanade.decolatech.viajava.domain.dtos.response.PackageResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.pacote.PackageResponse;
 import com.avanade.decolatech.viajava.domain.mapper.PackageMapper;
 import com.avanade.decolatech.viajava.domain.model.Package;
 import com.avanade.decolatech.viajava.domain.repository.PackageRepository;

@@ -5,7 +5,7 @@ import com.avanade.decolatech.viajava.config.chatbot.PromptManager;
 import com.avanade.decolatech.viajava.domain.dtos.request.GeminiChatHistoryRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.BotResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.GeminiChatResponse;
-import com.avanade.decolatech.viajava.domain.dtos.response.PackageResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.pacote.PackageResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 

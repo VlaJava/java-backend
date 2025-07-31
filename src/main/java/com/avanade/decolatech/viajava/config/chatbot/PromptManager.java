@@ -1,6 +1,7 @@
 package com.avanade.decolatech.viajava.config.chatbot;
 
-import com.avanade.decolatech.viajava.domain.dtos.response.PackageResponse;
+
+import com.avanade.decolatech.viajava.domain.dtos.response.pacote.PackageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
