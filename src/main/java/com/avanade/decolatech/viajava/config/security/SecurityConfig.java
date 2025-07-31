@@ -77,6 +77,7 @@ public class SecurityConfig {
                         .requestMatchers("/bookings").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/bookings/user").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/bookings/admin").hasRole("ADMIN")
+                        .requestMatchers("/chat").permitAll()
 
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e

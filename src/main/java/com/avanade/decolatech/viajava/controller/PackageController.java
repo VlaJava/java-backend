@@ -84,7 +84,7 @@ public class PackageController implements PackageControllerSwagger {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam(required = false) BigDecimal price,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer page,
-            @RequestParam(defaultValue = "6") @PositiveOrZero Integer size
+            @RequestParam(defaultValue = "10") @PositiveOrZero Integer size
     ) {
         Page<Package> response = getFilterPackagesService.execute(
                 source, destination, startDate, endDate, price, page, size
@@ -95,7 +95,7 @@ public class PackageController implements PackageControllerSwagger {
     @GetMapping
     public ResponseEntity< PaginatedResponse<PackageResponse> > getAllPackage(
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer page,
-            @RequestParam(defaultValue = "6") @PositiveOrZero Integer size
+            @RequestParam(defaultValue = "10") @PositiveOrZero Integer size
     ) {
         Page<Package> response = this.getAllPackagesService.execute(page, size);
 
