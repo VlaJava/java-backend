@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -52,7 +53,7 @@ public class CreateBookingService {
         User user = findUserById(userId);
         Package travelPackage = findPackageById(request.getPackageId());
 
-        validateBookingRules(request, travelPackage);
+        validateBookingRules(request, travelPackage, user.getId());
 
         Booking booking = buildBooking(request, user, travelPackage);
 
@@ -71,7 +72,15 @@ public class CreateBookingService {
                 .orElseThrow(() -> new ResourceNotFoundException("Package not found with ID: " + packageId));
     }
 
-    private void validateBookingRules(BookingRequest request, Package travelPackage) {
+    private void validateBookingRules(BookingRequest request, Package travelPackage, UUID userId) {
+        Optional<Booking> packageAlreadyReserved = this.bookingRepository
+                .findByPackageAndUserId(travelPackage.getId(), userId);
+
+        if(packageAlreadyReserved.isPresent()) {
+            throw new BusinessException("Is not possible to create booking for a package that already have an booking for same user.");
+        }
+
+
         if (!travelPackage.isAvailable()) {
             throw new BusinessException("Package is not available");
         }
