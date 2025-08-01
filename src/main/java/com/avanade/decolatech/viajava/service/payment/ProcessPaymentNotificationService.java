@@ -5,6 +5,7 @@ import com.avanade.decolatech.viajava.domain.dtos.request.payment.ProcessPayment
 import com.avanade.decolatech.viajava.domain.exception.PaymentGatewayException;
 import com.avanade.decolatech.viajava.domain.model.Booking;
 import com.avanade.decolatech.viajava.domain.model.PaymentEntity;
+import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.domain.model.enums.DomainPaymentMethod;
 import com.avanade.decolatech.viajava.domain.model.enums.DomainPaymentStatus;
 import com.avanade.decolatech.viajava.domain.repository.BookingRepository;
@@ -13,6 +14,7 @@ import com.avanade.decolatech.viajava.service.email.EmailService;
 import com.avanade.decolatech.viajava.strategy.EmailType;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.payment.PaymentStatus;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -80,19 +82,27 @@ public class ProcessPaymentNotificationService {
                 .booking(booking)
                 .paymentMethod(paymentMethod)
                 .paymentStatus(status)
-                .amount(payment.getTransactionAmount())
+                .amount(payment.getTransactionDetails().getTotalPaidAmount())
                 .paymentDate(paymentDate)
                 .build();
 
-        this.paymentRepository.save(paymentEntity);
-
         this.LOGGER.info("Payment created successfully.");
 
+        this.paymentRepository.save(paymentEntity);
+
         if(payment.getStatus().equals(PaymentStatus.APPROVED)) {
-            this.emailService.sendEmail(booking.getUser(), EmailType.PAYMENT_CONFIRMATION_EMAIL);
+            User user = booking.getUser();
+
+            Hibernate.initialize(user.getDocuments());
+            Hibernate.initialize(booking.getTravelers());
+
+            this.emailService.sendEmail(booking.getUser(), EmailType.PAYMENT_CONFIRMATION_EMAIL,
+                    paymentEntity,
+                    booking.getTravelers(),
+                    user.getDocuments(),
+                    booking);
         }
     }
-
 
     private DomainPaymentMethod getPaymentMethod(String paymentTypeId) {
         if (paymentTypeId == null || paymentTypeId.isBlank()) {
