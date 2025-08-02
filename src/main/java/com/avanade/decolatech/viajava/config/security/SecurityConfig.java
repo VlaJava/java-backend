@@ -50,46 +50,50 @@ public class SecurityConfig {
     public SecurityConfig(ApplicationProperties properties) {
         this.properties = properties;
     }
+  
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityFilter securityFilter, CustomAuthEntryPoint entryPoint) throws Exception {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, SecurityFilter securityFilter, CustomAuthEntryPoint entryPoint) throws Exception {
+    http
+            .csrf(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
+                    .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/packages", "/packages/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/users/*/image").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/payments/webhook").permitAll()
+                    .requestMatchers(HttpMethod.PATCH, "/users/reactivate").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/chat").permitAll()
+                    .requestMatchers("/dashboard/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PATCH, "/users/role").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST, "/users/admin").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("ADMIN", "CLIENT")
+                    .requestMatchers(HttpMethod.GET, "/users/*").authenticated()
+                    .requestMatchers(HttpMethod.PATCH, "/users/**").hasAnyRole("ADMIN", "CLIENT")
+                    .requestMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "CLIENT")
+                    .requestMatchers("/bookings/**").hasAnyRole("ADMIN", "CLIENT")
+                    .requestMatchers("/payments/**").hasAnyRole("ADMIN", "CLIENT")
+                    .requestMatchers(HttpMethod.POST, "/packages").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/packages/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PATCH, "/packages/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.DELETE, "/packages/**").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+            )
+            .exceptionHandling(e -> e
+                    .authenticationEntryPoint(entryPoint)
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2
+                    .jwt(jwt -> jwt
+                            .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                    ));
 
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.PATCH, "/users/role").hasRole("ADMIN")
-                        .requestMatchers("/dashboard/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/users/**").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers(HttpMethod.DELETE, "/users").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers(HttpMethod.GET, "/users/*/image").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/users/*").authenticated()
-                        .requestMatchers(HttpMethod.PATCH, "/users/reactivate").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/payments/webhook").permitAll()
-                        .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
-                        .requestMatchers("/packages/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/packages", "/packages/*").permitAll()
-                        .requestMatchers("/bookings").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers("/bookings/user").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers("/bookings/admin").hasRole("ADMIN")
+    return http.build();
+}
 
-                        .anyRequest().authenticated())
-                .exceptionHandling(e -> e
-                        .authenticationEntryPoint(entryPoint)
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                        ));
-
-        return http.build();
-    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

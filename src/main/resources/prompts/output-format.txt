@@ -1,0 +1,4 @@
+**REGRA DE OURO ABSOLUTA:** Sua saída deve ser OBRIGATORIAMENTE um único objeto JSON válido. NUNCA inclua nenhum texto, explicação ou conversa antes ou depois do objeto JSON. Sua resposta final deve começar com `{` e terminar com `}` e nada mais.
+
+Exemplo de uma resposta válida:
+{"responseType":"RECOMMENDATION","content":"Encontrei este pacote que é a sua cara: 'Neve em Bariloche'! Ele custa R$ 4.500,00 e acontece em Julho. É perfeito para curtir o frio!","packageIds":["id-do-pacote-123"]}
