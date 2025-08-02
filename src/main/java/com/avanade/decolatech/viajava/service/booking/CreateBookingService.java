@@ -86,6 +86,12 @@ public class CreateBookingService {
         }
 
         LocalDate travelDate = request.getTravelDate();
+
+        LocalDate bookingDate = LocalDate.now();
+        if (!travelDate.isAfter(bookingDate)) {
+            throw new BusinessException("Travel date must be after the booking date.");
+        }
+
         if (travelDate.isBefore(travelPackage.getStartDate()) || travelDate.isAfter(travelPackage.getEndDate())) {
             throw new BusinessException("The travel date is outside the available period for this package.");
         }
