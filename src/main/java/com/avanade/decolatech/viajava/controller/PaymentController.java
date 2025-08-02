@@ -1,5 +1,6 @@
 package com.avanade.decolatech.viajava.controller;
 
+import com.avanade.decolatech.viajava.controller.docs.PaymentControllerSwagger;
 import com.avanade.decolatech.viajava.domain.dtos.request.payment.CreatePaymentRequest;
 import com.avanade.decolatech.viajava.domain.dtos.request.payment.MercadoPagoNotification;
 import com.avanade.decolatech.viajava.domain.dtos.request.payment.ProcessPaymentNotificationRequest;
@@ -7,6 +8,7 @@ import com.avanade.decolatech.viajava.domain.dtos.response.payment.CreatePrefere
 import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.service.payment.CreatePreferenceService;
 import com.avanade.decolatech.viajava.service.payment.ProcessPaymentNotificationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +18,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Payments", description = "Endpoints to process payment request and handle webhook notification processing")
 @RestController
 @RequestMapping("/payments")
-public class PaymentController {
+public class PaymentController implements PaymentControllerSwagger {
 
     private final CreatePreferenceService createPreferenceService;
     private final ProcessPaymentNotificationService notificationService;
