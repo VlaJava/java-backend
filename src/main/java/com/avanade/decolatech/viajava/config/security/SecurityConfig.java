@@ -68,12 +68,17 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/payments/webhook").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/users/reactivate").permitAll()
                         .requestMatchers(HttpMethod.POST, "/chat").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reviews/package/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/reviews/package/*/stats").permitAll()
+
+
 
                         .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.PATCH, "/users/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/bookings/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/reviews").hasAnyRole("ADMIN", "CLIENT")
 
 
                         .requestMatchers(HttpMethod.POST, "/users/admin").hasRole("ADMIN")

@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.controller;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.GeminiChatRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.BotResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.geminiChat.GeminiChatRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.geminiChat.BotResponse;
 import com.avanade.decolatech.viajava.service.geminiChat.GeminiChatService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
