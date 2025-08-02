@@ -18,12 +18,12 @@
                 <tr>
                     <td style="padding: 30px;">
                         <h2 style="color:#f97316;">Pagamento Confirmado!</h2>
-                        <p>Olá <strong th:text="${nome}">Nome do Usuário</strong>,</p>
+                        <p>Olá <strong th:text="${name}">Nome do Usuário</strong>,</p>
                         <p>Temos ótimas notícias! O pagamento da sua reserva foi confirmado com sucesso.</p>
                         <p>Para verificar os detalhes desta e outras reservas, clique no link abaixo:</p>
 
                         <div style="text-align:center; margin: 30px 0;">
-                            <a th:href="${linkReservas}"
+                            <a th:href="${reservationsLink}"
                                style="background-color:#f97316; color:#ffffff; padding: 14px 28px; text-decoration:none; border-radius:6px; font-weight:bold;">
                                 Ver Detalhes da Reserva
                             </a>
@@ -37,7 +37,7 @@
 
                 <tr>
                     <td style="background-color:#f9f9f9; padding: 20px; text-align:center; font-size:12px; color:#999;">
-                        © <span th:text="${dataAtual}">2025</span> ViaJava. Todos os direitos reservados.<br>
+                        © <span th:text="${currentYear}">2025</span> ViaJava. Todos os direitos reservados.<br>
                         Esta é uma mensagem automática. Por favor, não responda este e-mail.
                     </td>
                 </tr>

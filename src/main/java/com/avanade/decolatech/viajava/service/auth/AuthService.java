@@ -25,14 +25,13 @@ public class AuthService {
 
     public LoginResponse generateToken(User user) {
         var now = Instant.now();
-        var expiresIn = 300L;
 
         String roleName = user.getRole().getUserRole().name();
 
         var claims = JwtClaimsSet.builder()
                 .issuer("viajava-backend")
                 .subject(user.getId().toString())
-                .expiresAt(now.plusSeconds(expiresIn * 10 * 60))
+                .expiresAt(now.plusSeconds(3 * 60 * 60))
                 .claim("scope", roleName)
                 .claim("username", user.getEmail())
                 .build();
@@ -41,7 +40,7 @@ public class AuthService {
                 .encode(JwtEncoderParameters.from(claims))
                 .getTokenValue();
 
-        return new LoginResponse(token, 5L);
+        return new LoginResponse(token, 3L);
     }
 
     public String validateToken(String token) {
