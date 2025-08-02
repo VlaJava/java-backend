@@ -1,4 +1,4 @@
-package com.avanade.decolatech.viajava.domain.dtos.response;
+package com.avanade.decolatech.viajava.domain.dtos.response.geminiChat;
 
 import com.avanade.decolatech.viajava.domain.dtos.response.pacote.PackageResponse;
 
