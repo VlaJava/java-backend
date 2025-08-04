@@ -17,11 +17,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -102,15 +104,15 @@ public class UserController implements UserControllerSwagger {
     }
 
     @GetMapping("/{id}/image")
-    public ResponseEntity<Resource> getUserImage(@PathVariable("id") UUID id) {
-        Resource resource = this.getUserImageService.getImage(id.toString());
+    public ResponseEntity<Resource> getUserImage(@AuthenticationPrincipal User user) {
+        Resource resource = this.getUserImageService.getImage(user.getImageUrl());
 
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id) {
-        this.deleteUserService.execute(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id, @AuthenticationPrincipal User user) {
+        this.deleteUserService.execute(id, user);
 
         return ResponseEntity.noContent().build();
     }
@@ -125,8 +127,17 @@ public class UserController implements UserControllerSwagger {
 
     @PatchMapping(path = "/{id}/update-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Resource> uploadImage(@ModelAttribute UploadImageRequest request, @PathVariable("id") UUID id) throws IOException {
+        MultipartFile file = request.getFile();
+        String contentType = file.getContentType();
+
         Resource response = this.updateUserImageService.updateProfileImage(request.getFile(), id);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(response);
+
+        assert contentType != null;
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getOriginalFilename() + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(response);
     }
 
     @PatchMapping(path = "/role")
