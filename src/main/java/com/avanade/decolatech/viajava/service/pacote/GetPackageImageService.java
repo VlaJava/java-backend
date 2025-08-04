@@ -1,43 +1,34 @@
 package com.avanade.decolatech.viajava.service.pacote;
 
+import com.avanade.decolatech.viajava.config.storage.StoragePort;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
+import com.avanade.decolatech.viajava.domain.model.Package;
+import com.avanade.decolatech.viajava.domain.repository.PackageRepository;
 import com.avanade.decolatech.viajava.utils.properties.ApplicationProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 
-import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.UUID;
 
 @Service
 public class GetPackageImageService {
 
     private final ApplicationProperties properties;
-    private final Logger logger = LoggerFactory.getLogger(GetPackageImageService.class);
+    private final StoragePort storagePort;
+    private final PackageRepository packageRepository;
 
-    public GetPackageImageService(ApplicationProperties properties) {
+    public GetPackageImageService(ApplicationProperties properties, StoragePort storagePort, PackageRepository packageRepository) {
         this.properties = properties;
+        this.storagePort = storagePort;
+        this.packageRepository = packageRepository;
     }
 
-    public Resource getImage(String id) {
-        Resource resource = null;
+    public Resource getImage(UUID id) {
+       String path = this.packageRepository
+               .findById(id)
+               .orElseThrow(() -> new ResourceNotFoundException("Package  not found"))
+               .getImageUrl();
 
-        try {
-            Path filePath = Paths.get(this.properties.getPkgImgUploadDir()).resolve(id);
-
-            resource = new UrlResource(filePath.toUri());
-
-            if(!resource.exists()) {
-                throw new ResourceNotFoundException("Image not found for this package");
-            }
-        } catch (MalformedURLException ex) {
-            this.logger.error("{} getImage - MalformedURLException: {} ", this.getClass().getName(), ex.getMessage());
-
-        }
-
-        return resource;
+       return this.storagePort.getImage(path);
     }
 }

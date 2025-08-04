@@ -1,23 +1,17 @@
 package com.avanade.decolatech.viajava.service.pacote;
 
+import com.avanade.decolatech.viajava.config.storage.StoragePort;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.domain.model.Package;
-import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.domain.repository.PackageRepository;
-import com.avanade.decolatech.viajava.service.user.UpdateUserImageService;
-import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 import com.avanade.decolatech.viajava.utils.properties.ApplicationProperties;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
@@ -25,10 +19,12 @@ public class UpdatePackageImageService {
 
     private final PackageRepository packageRepository;
     private final ApplicationProperties properties;
+    private final StoragePort storagePort;
 
-    public UpdatePackageImageService(PackageRepository packageRepository, ApplicationProperties properties) {
+    public UpdatePackageImageService(PackageRepository packageRepository, ApplicationProperties properties, StoragePort storagePort) {
         this.packageRepository = packageRepository;
         this.properties = properties;
+        this.storagePort = storagePort;
     }
 
     @Transactional
@@ -40,34 +36,18 @@ public class UpdatePackageImageService {
 
         Package travelPackage = this.packageRepository
                 .findById(id)
-                .orElseThrow(() ->  new ResourceNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         String.format("[%s updatePackageImage] - %s",
                                 this.getClass().getName(),
                                 "Package not found with id: " + id)));
 
 
-        Path filePath = this.saveLocalImage(file, id);
+        String fileUri = this.storagePort.saveImage(file, this.properties.getPkgImgUploadDir(), id);
 
-        Resource resource = new UrlResource(filePath.toUri());
-
-        travelPackage.setImageUrl(filePath.toString());
+        travelPackage.setImageUrl(fileUri);
 
         this.packageRepository.save(travelPackage);
 
-        return resource;
+        return new InputStreamResource(file.getInputStream());
     }
-
-    private Path saveLocalImage(MultipartFile file, UUID id) throws IOException {
-
-        Path uploadPath = Paths.get(this.properties.getPkgImgUploadDir());
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        Path filePath = uploadPath.resolve(id.toString());
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return filePath;
-    }
-
 }
