@@ -69,7 +69,7 @@ public interface UserControllerSwagger {
             @ApiResponse(responseCode = "404", description = "User not found.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))),
             @ApiResponse(responseCode = "422", description = "The id passed in the request is invalid.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class)))
     })
-    ResponseEntity<Resource> getUserImage(@PathVariable("id") UUID id);
+    ResponseEntity<Resource> getUserImage(@AuthenticationPrincipal User user);
 
     @Operation(summary = "Filter user payments with pagination",
             description = "Returns a paginated list of filtered user payments.",
@@ -94,7 +94,7 @@ public interface UserControllerSwagger {
             @ApiResponse(responseCode = "404", description = "User not found.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class))),
             @ApiResponse(responseCode = "422", description = "The id passed in the request is invalid.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApplicationException.class)))
     })
-    ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id);
+    ResponseEntity<Void> deleteUser(@PathVariable("id") UUID id, @AuthenticationPrincipal User user);
 
     @Operation(summary = "Reactivates the user account",
     description = "Resource to reactivate the user account",
