@@ -49,7 +49,7 @@ jwt:
 app:
   base-url: ${SERVER_BASE_URL:http://localhost:8080/api/v1}
   redirect-url: ${REDIRECT_URL:http://localhost:8080/api/v1/usuarios}
-  frontend-url: ${FRONTEND_URL:http://localhost:3000}
+  frontend-url: ${FRONTEND_URL:http://localhost:4200}
   frontend-bookings-url: ${FRONTEND_BOOKINGS_URL:http://localhost:8080/api/v1}
   file:
     upload:
@@ -58,7 +58,11 @@ app:
   gateway:
     mercado-pago:
       access-token: ${GATEWAY_ACCESS_TOKEN}
-      notification-url: ${GATEWAY_NOTIFICATION_URL:https://0e4aa1b42535.ngrok-free.app/api/v1/payments/success}
-      success-url: ${FRONTEND_SUCCESS_URL:https://0e4aa1b42535.ngrok-free.app/api/v1/payments/success}
-      fail-url: ${FRONTEND_FAIL_URL:https://0e4aa1b42535.ngrok-free.app/api/v1/payments/fail}
-      pending-url: ${FRONTEND_PENDING_URL:https://0e4aa1b42535.ngrok-free.app/api/v1/payments/pending}
+      notification-url: ${GATEWAY_NOTIFICATION_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/success}
+      success-url: ${FRONTEND_SUCCESS_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/success}
+      fail-url: ${FRONTEND_FAIL_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/fail}
+      pending-url: ${FRONTEND_PENDING_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/pending}
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}

@@ -34,13 +34,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
     private final ApplicationProperties properties;
+
     private static final String[] DOCUMENTATION_OPENAPI = {
             "/docs/index.html",
             "/viajava.html", "/viajava/**",
@@ -62,33 +62,48 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
+                                       
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers(HttpMethod.PATCH, "/users/reactivate").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/*/image").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/packages", "/packages/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/payments/webhook").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/packages", "/packages/*", "/packages/*/image").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/reviews/package/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/reviews/package/*/stats").permitAll()
+                        .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/chat").permitAll()
+                       
+    
+                                       
+                                       
+                        .requestMatchers(HttpMethod.POST, "/packages").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/packages/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/packages/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/packages/**").hasRole("ADMIN")                                       
                         .requestMatchers(HttpMethod.PATCH, "/users/role").hasRole("ADMIN")
                         .requestMatchers("/dashboard/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/users/**").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers(HttpMethod.DELETE, "/users").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers(HttpMethod.GET, "/users/*/image").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/users/*").authenticated()
-                        .requestMatchers(HttpMethod.PATCH, "/users/reactivate").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/payments/webhook").permitAll()
-                        .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/packages", "/packages/*", "/packages/*/image").permitAll()
-                        .requestMatchers("/packages/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/packages").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/packages/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/packages/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/packages/**").hasRole("ADMIN")
                         .requestMatchers("/bookings").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/bookings/user").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/bookings/admin").hasRole("ADMIN")
-
+                        .requestMatchers(HttpMethod.POST, "/reviews").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers(HttpMethod.GET, "/users/*").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/users/**").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers("/bookings/**").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers("/payments/**").hasAnyRole("ADMIN", "CLIENT")                                                                                                
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e
-                        .authenticationEntryPoint(entryPoint)
-                )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                        ));
+                        .authenticationEntryPoint(entryPoint))
+                .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
 
         return http.build();
     }
@@ -108,10 +123,10 @@ public class SecurityConfig {
         return source;
     }
 
-
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return username -> userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException(UserExceptionMessages.USER_NOT_FOUND));
+        return username -> userRepository.findByEmail(username)
+                .orElseThrow(() -> new ResourceNotFoundException(UserExceptionMessages.USER_NOT_FOUND));
     }
 
     @Bean
@@ -130,7 +145,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -138,20 +152,16 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder
-                .withPublicKey(this.properties.getPublicKey())
-                .build();
+        return NimbusJwtDecoder.withPublicKey(this.properties.getPublicKey()).build();
     }
 
     @Bean
     public JwtEncoder jwtEncoder() {
-        JWK jwk = new RSAKey
-                .Builder(this.properties.getPublicKey())
+        JWK jwk = new RSAKey.Builder(this.properties.getPublicKey())
                 .privateKey(this.properties.getPrivateKey())
                 .build();
 
         var jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
-
         return new NimbusJwtEncoder(jwks);
     }
 }
