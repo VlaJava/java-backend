@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -36,6 +37,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final ApplicationProperties properties;
@@ -73,8 +75,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
                         .requestMatchers(HttpMethod.POST,"/payments/webhook").permitAll()
                         .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/packages", "/packages/*", "/packages/*/image").permitAll()
                         .requestMatchers("/packages/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,"/packages", "/packages/*").permitAll()
                         .requestMatchers("/bookings").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/bookings/user").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/bookings/admin").hasRole("ADMIN")
