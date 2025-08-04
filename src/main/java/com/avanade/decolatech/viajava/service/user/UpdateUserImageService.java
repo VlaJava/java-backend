@@ -1,10 +1,12 @@
 package com.avanade.decolatech.viajava.service.user;
 
+import com.avanade.decolatech.viajava.config.storage.StoragePort;
 import com.avanade.decolatech.viajava.domain.exception.ResourceNotFoundException;
 import com.avanade.decolatech.viajava.domain.model.User;
 import com.avanade.decolatech.viajava.domain.repository.UserRepository;
 import com.avanade.decolatech.viajava.utils.UserExceptionMessages;
 import com.avanade.decolatech.viajava.utils.properties.ApplicationProperties;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,10 +26,12 @@ public class UpdateUserImageService {
 
     private final UserRepository userRepository;
     private final ApplicationProperties properties;
+    private final StoragePort storagePort;
 
-    public UpdateUserImageService(UserRepository userRepository, ApplicationProperties properties) {
+    public UpdateUserImageService(UserRepository userRepository, ApplicationProperties properties, StoragePort storagePort) {
         this.userRepository = userRepository;
         this.properties = properties;
+        this.storagePort = storagePort;
     }
 
     @Transactional
@@ -44,28 +49,12 @@ public class UpdateUserImageService {
                                 UserExceptionMessages.USER_NOT_FOUND)));
 
 
-        Path filePath = this.saveLocalImage(file, id);
+        String fileUri = this.storagePort.saveImage(file, this.properties.getUserImageUploadDir() ,id);
 
-        Resource resource = new UrlResource(filePath.toUri());
-
-        user.setImageUrl(filePath.toString());
+        user.setImageUrl(fileUri);
 
         this.userRepository.save(user);
 
-        return resource;
+       return new InputStreamResource(file.getInputStream());
     }
-
-    private Path saveLocalImage(MultipartFile file, UUID id) throws IOException {
-
-        Path uploadPath = Paths.get(this.properties.getUserImageUploadDir());
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        Path filePath = uploadPath.resolve(id.toString());
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return filePath;
-    }
-
 }

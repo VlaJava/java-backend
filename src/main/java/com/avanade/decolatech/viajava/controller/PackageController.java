@@ -4,31 +4,28 @@ import com.avanade.decolatech.viajava.controller.docs.PackageControllerSwagger;
 import com.avanade.decolatech.viajava.domain.dtos.request.pacote.CreatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.request.pacote.UpdatePackageRequest;
 import com.avanade.decolatech.viajava.domain.dtos.request.user.UploadImageRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.pacote.CreatePackageResponse;
 import com.avanade.decolatech.viajava.domain.dtos.response.pacote.PackageResponse;
-import com.avanade.decolatech.viajava.domain.dtos.response.PaginatedResponse;
-import com.avanade.decolatech.viajava.domain.exception.ApplicationException;
 import com.avanade.decolatech.viajava.domain.mapper.PackageMapper;
 import com.avanade.decolatech.viajava.domain.model.Package;
 import com.avanade.decolatech.viajava.service.pacote.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URLConnection;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -93,7 +90,7 @@ public class PackageController implements PackageControllerSwagger {
     }
 
     @GetMapping
-    public ResponseEntity< PaginatedResponse<PackageResponse> > getAllPackage(
+    public ResponseEntity<PaginatedResponse<PackageResponse>> getAllPackage(
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer page,
             @RequestParam(defaultValue = "10") @PositiveOrZero Integer size
     ) {
@@ -103,12 +100,14 @@ public class PackageController implements PackageControllerSwagger {
     }
 
     @GetMapping("/{id}/image")
-    public ResponseEntity<Resource> getPackageImage(@PathVariable("id") UUID id)  {
-        Resource resource = this.getPackageImageService.getImage(id.toString());
+    public ResponseEntity<Resource> getPackageImage(@PathVariable("id") UUID id) {
+        Resource resource = this.getPackageImageService.getImage(id);
 
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .contentType(MediaType.parseMediaType(
+                        URLConnection.guessContentTypeFromName(resource.getFilename())
+                ))
                 .body(resource);
     }
 
@@ -130,8 +129,17 @@ public class PackageController implements PackageControllerSwagger {
 
     @PatchMapping(path = "/{id}/update-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Resource> updateImage(@ModelAttribute UploadImageRequest request, @PathVariable("id") UUID id) throws IOException {
+        MultipartFile file = request.getFile();
+        String contentType = file.getContentType();
+
         Resource response = this.updatePackageImageService.updatePackageImage(request.getFile(), id);
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(response);
+
+        assert contentType != null;
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getOriginalFilename() + "\"")
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(response);
     }
 
     @DeleteMapping("/{id}")
