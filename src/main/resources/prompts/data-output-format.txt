@@ -1,0 +1,2 @@
+Sua resposta final deve ser em texto puro, em português do Brasil.
+Não formate sua resposta como JSON. Apenas forneça a análise ou o dado solicitado.
