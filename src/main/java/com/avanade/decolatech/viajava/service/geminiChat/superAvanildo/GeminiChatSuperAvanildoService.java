@@ -2,11 +2,11 @@ package com.avanade.decolatech.viajava.service.geminiChat.superAvanildo;
 
 
 import com.avanade.decolatech.viajava.config.chatbot.GeminiApiClient;
-import com.avanade.decolatech.viajava.controller.GeminiChatController;
 import com.avanade.decolatech.viajava.domain.dtos.request.geminiChat.GeminiChatHistoryRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.geminiChat.GeminiChatSuperResponse;
 import jakarta.annotation.PostConstruct;
-import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -46,7 +46,7 @@ public class GeminiChatSuperAvanildoService {
         }
     }
 
-    public GeminiChatController.DataChatResponse getChatResponse(String userMessage, List<GeminiChatHistoryRequest> history) throws IOException {
+    public GeminiChatSuperResponse getChatResponse(String userMessage, List<GeminiChatHistoryRequest> history) throws IOException {
         String dataContext = dataSnapshotService.getDatabaseSnapshotAsJson();
         String historyContext = formatHistory(history);
 
@@ -56,7 +56,7 @@ public class GeminiChatSuperAvanildoService {
 
         String rawGeminiResponse = geminiApiClient.generateContent(this.systemInstruction, userPrompt);
 
-        return new GeminiChatController.DataChatResponse(rawGeminiResponse);
+        return new GeminiChatSuperResponse(rawGeminiResponse);
     }
 
     private String formatHistory(List<GeminiChatHistoryRequest> history) {
