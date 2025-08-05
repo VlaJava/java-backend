@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -35,6 +36,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final ApplicationProperties properties;
@@ -60,6 +62,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(DOCUMENTATION_OPENAPI).permitAll()
+                                       
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
@@ -67,29 +70,38 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/users/*/image").permitAll()
                         .requestMatchers(HttpMethod.GET, "/packages", "/packages/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/payments/webhook").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/chat").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/packages", "/packages/*", "/packages/*/image").permitAll()
                         .requestMatchers(HttpMethod.GET,"/reviews/package/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/reviews/package/*/stats").permitAll()
-
-                        .requestMatchers("/dashboard/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users/admin").hasRole("ADMIN")
+                        .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/chat").permitAll()
+                       
+    
+                                       
+                                       
+                        .requestMatchers(HttpMethod.POST, "/packages").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/packages/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/packages/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/packages/**").hasRole("ADMIN")                                       
                         .requestMatchers(HttpMethod.PATCH, "/users/role").hasRole("ADMIN")
+                        .requestMatchers("/dashboard/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/packages").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/packages/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/packages/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/packages/**").hasRole("ADMIN")
-
+                        .requestMatchers("/bookings").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers("/bookings/user").hasAnyRole("ADMIN", "CLIENT")
+                        .requestMatchers("/bookings/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/reviews").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.GET, "/users/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.GET, "/users/*").authenticated()
                         .requestMatchers(HttpMethod.PATCH, "/users/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "CLIENT")
-
                         .requestMatchers("/bookings/**").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers("/payments/**").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers(HttpMethod.POST, "/reviews").hasAnyRole("ADMIN", "CLIENT")
-
-                        .anyRequest().authenticated()
-                )
+                        .requestMatchers("/payments/**").hasAnyRole("ADMIN", "CLIENT")                                                                                                
+                        .anyRequest().authenticated())
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(entryPoint))
                 .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint))
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
 

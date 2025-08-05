@@ -1,7 +1,7 @@
 package com.avanade.decolatech.viajava.unit.services.usuarios;
 
-import com.avanade.decolatech.viajava.domain.dtos.request.CreateUserRequest;
-import com.avanade.decolatech.viajava.domain.dtos.response.CreateUserResponse;
+import com.avanade.decolatech.viajava.domain.dtos.request.user.CreateUserRequest;
+import com.avanade.decolatech.viajava.domain.dtos.response.user.CreateUserResponse;
 import com.avanade.decolatech.viajava.domain.exception.BusinessException;
 import com.avanade.decolatech.viajava.domain.mapper.UserMapper;
 import com.avanade.decolatech.viajava.domain.model.Document;

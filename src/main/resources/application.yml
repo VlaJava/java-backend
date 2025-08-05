@@ -63,7 +63,6 @@ app:
       fail-url: ${FRONTEND_FAIL_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/fail}
       pending-url: ${FRONTEND_PENDING_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/pending}
 
-
 gemini:
   api:
     key: ${GEMINI_API_KEY}
