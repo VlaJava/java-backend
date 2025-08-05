@@ -1,5 +1,6 @@
 package com.avanade.decolatech.viajava.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Traveler {
 
     @ManyToOne
     @JoinColumn(name = "BOOKING_ID", nullable = false)
+    @JsonIgnore
     private Booking booking;
 
     @Column(name = "NAME", nullable = false, length = 100)

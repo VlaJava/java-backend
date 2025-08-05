@@ -1,4 +1,4 @@
-package com.avanade.decolatech.viajava.service.geminiChat;
+package com.avanade.decolatech.viajava.service.geminiChat.avanildo;
 
 import com.avanade.decolatech.viajava.config.chatbot.GeminiApiClient;
 import com.avanade.decolatech.viajava.config.chatbot.PromptManager;
@@ -16,14 +16,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class GeminiChatService {
+public class GeminiChatAvanildoService {
 
     private final GetAllPackageChatService packageService;
     private final PromptManager promptManager;
     private final GeminiApiClient geminiApiClient;
     private final ObjectMapper objectMapper;
 
-    public GeminiChatService(GetAllPackageChatService packageService, PromptManager promptManager, GeminiApiClient geminiApiClient, ObjectMapper objectMapper) {
+    public GeminiChatAvanildoService(GetAllPackageChatService packageService, PromptManager promptManager, GeminiApiClient geminiApiClient, ObjectMapper objectMapper) {
         this.packageService = packageService;
         this.promptManager = promptManager;
         this.geminiApiClient = geminiApiClient;
