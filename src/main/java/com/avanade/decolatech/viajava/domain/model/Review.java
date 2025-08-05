@@ -1,5 +1,6 @@
 package com.avanade.decolatech.viajava.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,7 @@ public class Review {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOOKING_ID", nullable = false)
+    @JsonIgnore
     private Booking booking;
 
     @Column(name = "RATING")

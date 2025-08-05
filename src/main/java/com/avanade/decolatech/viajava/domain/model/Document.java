@@ -1,6 +1,7 @@
 package com.avanade.decolatech.viajava.domain.model;
 
 import com.avanade.decolatech.viajava.domain.model.enums.DocumentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class Document {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Enumerated(EnumType.STRING)
