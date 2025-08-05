@@ -2,6 +2,7 @@ package com.avanade.decolatech.viajava.controller;
 
 import com.avanade.decolatech.viajava.domain.dtos.request.geminiChat.GeminiChatRequest;
 import com.avanade.decolatech.viajava.domain.dtos.response.geminiChat.BotResponse;
+import com.avanade.decolatech.viajava.domain.dtos.response.geminiChat.GeminiChatSuperResponse;
 import com.avanade.decolatech.viajava.service.geminiChat.superAvanildo.GeminiChatSuperAvanildoService;
 import com.avanade.decolatech.viajava.service.geminiChat.avanildo.GeminiChatAvanildoService;
 import jakarta.validation.Valid;
@@ -23,7 +24,6 @@ public class GeminiChatController {
         this.geminiChatAvanildoService = geminiChatAvanildoService;
     }
 
-    public record DataChatResponse(String text) {}
 
     @PostMapping
     public ResponseEntity<BotResponse> handleChatMessage(@Valid @RequestBody GeminiChatRequest request) throws Exception {
@@ -33,8 +33,8 @@ public class GeminiChatController {
     }
 
     @PostMapping("/super")
-    public ResponseEntity<DataChatResponse> handleDataChatMessage(@Valid @RequestBody GeminiChatRequest request) throws Exception {
-        DataChatResponse response = geminiChatSuperAvanildoService.getChatResponse(request.message(), request.history());
+    public ResponseEntity<GeminiChatSuperResponse> handleDataChatMessage(@Valid @RequestBody GeminiChatRequest request) throws Exception {
+        GeminiChatSuperResponse response = geminiChatSuperAvanildoService.getChatResponse(request.message(), request.history());
         return ResponseEntity.ok(response);
     }
 }
