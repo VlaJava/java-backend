@@ -1,80 +1,100 @@
-variable "aws_region" {
+variable "resource_group_name" {
   type        = string
-  default     = "us-east-1"
-  description = "The region where the infrastructure will be created"
+  description = "The name of the resource group."
 }
 
-variable "bucket_name" {
-  type = string
+variable "location" {
+  type        = string
+  description = "The Azure region."
 }
 
-variable "admin_login" {
+variable "container_registry_name" {
   type        = string
-  description = "The administrator login for the SQL Server."
+  description = "Name for the Azure Container Registry."
 }
 
-variable "admin_password" {
+variable "container_app_env_name" {
   type        = string
-  description = "The administrator password for the SQL Server."
+  description = "Name for the Azure Container App Environment."
+}
+
+variable "container_app_name" {
+  type        = string
+  description = "Name for the Azure Container App."
+}
+
+variable "docker_image_name" {
+  type        = string
+}
+
+variable "sql_server_fqdn" {
+  type        = string
+  description = "The FQDN of the SQL server."
+}
+
+variable "sql_db_name" {
+  type        = string
+  description = "The name of the SQL database."
+}
+
+variable "db_admin_login" {
+  type        = string
+  description = "The admin login for the database."
+}
+
+variable "db_admin_password" {
+  description = "The administrator password for the database."
+  type        = string
   sensitive   = true
 }
 
-variable "azure_region" {
-  type    = string
-  default = "Region where Azure resources will be created"
-}
-
-variable "azure_resource_group" {
-  type        = string
-  description = "Name of the Azure resource group."
-}
-
-variable "allowed_ip" {
-  type        = string
-  description = "IP that can access the database instance"
-}
-
-variable "azure_subscription_id" {
-  type = string
-}
-
 variable "aws_access_key" {
-  description = "AWS Access Key for the application."
+  description = "AWS Access Key."
   type        = string
   sensitive   = true
 }
 
 variable "aws_secret_key" {
-  description = "AWS Secret Key for the application."
+  description = "AWS Secret Key."
   type        = string
   sensitive   = true
 }
 
+variable "aws_region" {
+  description = "AWS Region."
+  type        = string
+}
+
+variable "bucket_name" {
+  description = "S3 Bucket Name."
+  type        = string
+}
+
 variable "gateway_access_token" {
-  description = "Gateway Access Token for the application."
+  description = "Gateway Access Token."
   type        = string
   sensitive   = true
 }
 
 variable "gemini_api_key" {
-  description = "Gemini API Key for the application."
+  description = "Gemini API Key."
   type        = string
   sensitive   = true
 }
 
 variable "mail_password" {
-  description = "Mail Password for the application."
+  description = "Mail Password."
   type        = string
   sensitive   = true
 }
 
 variable "mail_username" {
-  description = "Mail Username for the application."
+  description = "Mail Username."
   type        = string
 }
 
 variable "spring_profiles_active" {
-  description = "Spring profiles to activate for the application."
+  description = "Spring profiles to activate."
   type        = string
   default     = "prod"
 }
@@ -120,6 +140,5 @@ variable "frontend_pending_url" {
 }
 
 variable "docker_hub_image" {
-  type        = string
-  description = "Name of the Docker image in docker hub."
+  type = string
 }
