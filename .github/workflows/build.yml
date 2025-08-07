@@ -22,7 +22,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Build with Maven
-        run: ./mvnw clean install -Pprod
+        run: mvn clean install -Pprod
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
