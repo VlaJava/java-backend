@@ -67,7 +67,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/auth/signup/account-confirmation").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.PATCH, "/users/reactivate").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/users/*/image").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/packages", "/packages/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/payments/webhook").permitAll()
                         .requestMatchers(HttpMethod.GET, "/packages", "/packages/*", "/packages/*/image").permitAll()
@@ -75,10 +75,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/reviews/package/*/stats").permitAll()
                         .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/chat").permitAll()
-                       
-    
-                                       
-                                       
+
+                        .requestMatchers(HttpMethod.GET, "/users/*/image").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.POST, "/packages").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/packages/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/packages/**").hasRole("ADMIN")
@@ -100,7 +98,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/users/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/bookings/**").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers("/payments/**").hasAnyRole("ADMIN", "CLIENT")                                                                                                
+                        .requestMatchers("/payments/**").hasAnyRole("ADMIN", "CLIENT")
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(entryPoint))

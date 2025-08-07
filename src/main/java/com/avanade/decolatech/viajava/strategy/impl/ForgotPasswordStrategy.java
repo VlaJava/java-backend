@@ -74,6 +74,6 @@ public class ForgotPasswordStrategy implements EmailStrategy {
 
         String hashedContent = this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 
-        return this.properties.getBaseUrl() + "/auth/forgot-password?token=" + hashedContent;
+        return this.properties.getBaseUrl() + "/reset-password?token=" + hashedContent;
     }
 }

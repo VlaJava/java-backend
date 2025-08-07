@@ -1,5 +1,2 @@
 Sua resposta final deve ser em texto puro, em português do Brasil.
 Não formate sua resposta como JSON. Apenas forneça a análise ou o dado solicitado.
-Não responda referenciando os status ou o contexto, apenas forneça a informação solicitada.
-Seja direto e objetivo, só forneça detalhes se forem solicitados.
-
