@@ -58,10 +58,10 @@ app:
   gateway:
     mercado-pago:
       access-token: ${GATEWAY_ACCESS_TOKEN}
-      notification-url: ${GATEWAY_NOTIFICATION_URL:https://4cce327112cf.ngrok-free.app/api/v1/payments/success}
-      success-url: ${FRONTEND_SUCCESS_URL:https://4cce327112cf.ngrok-free.app/api/v1/payments/success}
-      fail-url: ${FRONTEND_FAIL_URL:https://4cce327112cf.ngrok-free.app/api/v1/payments/fail}
-      pending-url: ${FRONTEND_PENDING_URL:https://4cce327112cf.ngrok-free.app/api/v1/payments/pending}
+      notification-url: ${GATEWAY_NOTIFICATION_URL:https://545c48785db5.ngrok-free.app/api/v1/payments/success}
+      success-url: ${FRONTEND_SUCCESS_URL:https://d45ab5611102.ngrok-free.app/api/v1/payments/success}
+      fail-url: ${FRONTEND_FAIL_URL:https://d45ab5611102.ngrok-free.app/api/v1/payments/fail}
+      pending-url: ${FRONTEND_PENDING_URL:FRONTEND_URL:https://d45ab5611102.ngrok-free.app/api/v1/payments/pending}
 
 gemini:
   api:

@@ -76,8 +76,6 @@ public class SecurityConfig {
                         .requestMatchers("/payments/**").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/chat").permitAll()
 
-
-
                         .requestMatchers(HttpMethod.GET, "/users/*/image").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.POST, "/packages").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/packages/**").hasRole("ADMIN")
@@ -100,7 +98,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/users/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "CLIENT")
                         .requestMatchers("/bookings/**").hasAnyRole("ADMIN", "CLIENT")
-                        .requestMatchers("/payments/**").hasAnyRole("ADMIN", "CLIENT")                                                                                                
+                        .requestMatchers("/payments/**").hasAnyRole("ADMIN", "CLIENT")
                         .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(entryPoint))
