@@ -1,0 +1,68 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+spring:
+  application:
+    name: ViaJava
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:sqlserver://${DATABASE_URL:localhost;databaseName=DB_VIAJAVA;encrypt=false}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enabled: true
+            required: true
+
+jwt:
+  public-key: classpath:app.pub
+  private-key: classpath:app.key
+
+app:
+  base-url: ${SERVER_BASE_URL:http://localhost:8080/api/v1}
+  redirect-url: ${REDIRECT_URL:http://localhost:8080/api/v1/usuarios}
+  frontend-url: ${FRONTEND_URL:http://localhost:4200}
+  frontend-bookings-url: ${FRONTEND_BOOKINGS_URL:http://localhost:8080/api/v1}
+  file:
+    upload:
+      user-dir: ./uploads/user-images
+      pkg-dir: ./uploads/package-images
+  gateway:
+    mercado-pago:
+      access-token: ${GATEWAY_ACCESS_TOKEN}
+      notification-url: ${GATEWAY_NOTIFICATION_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/success}
+      success-url: ${FRONTEND_SUCCESS_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/success}
+      fail-url: ${FRONTEND_FAIL_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/fail}
+      pending-url: ${FRONTEND_PENDING_URL:https://7f3bc492bf54.ngrok-free.app/api/v1/payments/pending}
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
