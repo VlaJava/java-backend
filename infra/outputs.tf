@@ -13,10 +13,12 @@ output "bucket_region" {
   value       = module.s3_bucket.bucket_region
 }
 
-output "sqlserver_vm_ip" {
-  value = module.azure_sql_vm.azure_vm_public_ip
+output "application_url" {
+  description = "The URL of the deployed application."
+  value       = module.container_app.app_url
 }
 
-output "sqlserver_vm_admin_username" {
-  value = var.vm_admin_username
+output "database_domain_name" {
+  description = "Database domain name"
+  value       = module.sql_server.fqdn
 }

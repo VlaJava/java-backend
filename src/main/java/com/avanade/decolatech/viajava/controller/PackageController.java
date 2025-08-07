@@ -102,12 +102,9 @@ public class PackageController implements PackageControllerSwagger {
     @GetMapping("/{id}/image")
     public ResponseEntity<Resource> getPackageImage(@PathVariable("id") UUID id) {
         Resource resource = this.getPackageImageService.getImage(id);
-
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                .contentType(MediaType.parseMediaType(
-                        URLConnection.guessContentTypeFromName(resource.getFilename())
-                ))
+                .contentType(MediaType.IMAGE_JPEG)
                 .body(resource);
     }
 
