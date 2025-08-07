@@ -63,8 +63,8 @@ resource "azurerm_container_app" "ca" {
     container {
       name   = var.docker_image_name
       image  = var.docker_hub_image
-      cpu    = 0.25
-      memory = "0.5Gi"
+      cpu    = 0.5
+      memory = "1.0Gi"
 
       env {
         name  = "DATABASE_URL"

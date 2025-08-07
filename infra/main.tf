@@ -49,7 +49,7 @@ module "sql_server" {
   resource_group_name = module.resource_group.name
   location            = module.resource_group.location
   sql_server_name     = "sql-${var.azure_resource_group}"
-  sql_database_name   = "sqldb-viajava"
+  sql_database_name   = "DB_VIAJAVA"
   admin_login         = var.admin_login
   admin_password      = var.admin_password
   allowed_ip          = var.allowed_ip
@@ -62,7 +62,7 @@ module "container_app" {
   container_registry_name  = "acrviajavacontainer"
   container_app_env_name   = "cae-${var.azure_resource_group}"
   container_app_name       = "aca-${var.azure_resource_group}"
-  docker_hub_image =          var.docker_hub_image
+  docker_hub_image         = var.docker_hub_image
   docker_image_name        = "viajava-app"
   sql_server_fqdn          = module.sql_server.fqdn
   sql_db_name              = module.sql_server.db_name

@@ -18,7 +18,7 @@ output "application_url" {
   value       = module.container_app.app_url
 }
 
-output "container_registry_login_server" {
-  description = "The login server for the Azure Container Registry."
-  value       = module.container_app.registry_login_server
+output "database_domain_name" {
+  description = "Database domain name"
+  value       = module.sql_server.fqdn
 }
