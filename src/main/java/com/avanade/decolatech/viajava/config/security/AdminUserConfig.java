@@ -20,6 +20,7 @@ import java.time.LocalDate;
  * Classe responsável por encriptar a password do admin a nível de banco de dados.
  */
 @Configuration
+@Profile("default")
 public class AdminUserConfig implements CommandLineRunner {
 
 
